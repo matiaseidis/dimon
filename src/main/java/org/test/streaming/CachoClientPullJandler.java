@@ -36,6 +36,8 @@ public class CachoClientPullJandler extends CachoClientHandler {
 		long remainingTime = remainingBytes * deltaT / this.getAmountOfReceivedBytes();
 		this.setMsToComplete(remainingTime);
 		this.setProgressPct((int) (((double) this.getAmountOfReceivedBytes() / length) * 100));
+		double bw = this.getAmountOfReceivedBytes() / ((double) deltaT / 1000d);
+		this.getProgressReport().setBandWidth(bw);
 		this.getProgressObserver().progressed(this.getProgressReport());
 	}
 
