@@ -3,8 +3,6 @@ package org.test.streaming;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 public class DummyMovieRetrievalPlan implements MovieRetrievalPlan {
 
 	private final String videoId;
