@@ -16,7 +16,7 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 
 	protected static final Log log = LogFactory.getLog(Demo.class);
 
-	private static int bufferSize = 256 * 256;
+	private static int bufferSize = 256 * 256 * 8;
 	private String videoParam = "id";
 
 	private static final long serialVersionUID = 1L;
@@ -98,6 +98,7 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 			os.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			// 375kBs
 		}
 
 	}
@@ -108,7 +109,8 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 
 	public void downloadFile(HttpServletResponse response, String videoId, int videoSize, Conf conf) throws Exception {
 		try {
-			// response.setBufferSize(bufferSize);
+			System.out.println("Buffer size: " + response.getBufferSize());
+			response.setBufferSize(bufferSize);
 			response.setContentType(contentTypeMP4);
 			response.setContentLength(videoSize);
 			response.addHeader("Content-disposition", "attachment;filename=" + videoId);
@@ -116,13 +118,13 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 			response.flushBuffer();
 
 			OutputStream os = response.getOutputStream();
-
 			new DefaultMovieRetrievalPlanInterpreter(new File("sharedCachos"), new File("tempCachos")).interpret(new DummyMovieRetrievalPlan(videoId, conf), os, new ProgressLogger());
 
 			os.flush();
 			os.close();
 		} catch (Exception ex) {
 			ex.printStackTrace();
+			throw ex;
 		}
 	}
 
