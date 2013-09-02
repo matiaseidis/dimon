@@ -38,14 +38,15 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 		try {
 			this.setCurrentOut(new BufferedOutputStream(new FileOutputStream(this.getCachoFile())));
 		} catch (FileNotFoundException e) {
-			
-			log.fatal("Faile to create new local cacho file " + this.getCachoFile(), e);
+			log.fatal("Failed to create new local cacho file " + this.getCachoFile(), e);
+			return;
 		}
 		log.debug("[" + firstByte + ", " + (cachoLength - 1) + "] (" + cachoLength + ") - Downloading... ");
 	}
 
 	@Override
 	public void stream() {
+		Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
 		synchronized (this) {
 			this.setStreaming(true);
 		}
@@ -146,6 +147,7 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 		try {
 			cachoFileInputStream = new FileInputStream(file);
 			int copy = IOUtils.copy(cachoFileInputStream, this.getOut());
+			this.getOut().flush();
 			log.info("Streamed  " + copy + " bytes from cacho file.");
 		} catch (FileNotFoundException e1) {
 			log.error("Failed to open cacho flie " + this.sharedCachoFile() + " to stream, nothing will be streamed.", e1);

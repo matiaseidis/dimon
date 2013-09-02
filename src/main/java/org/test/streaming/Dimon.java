@@ -59,6 +59,8 @@ public class Dimon extends SimpleChannelUpstreamHandler {
 	}
 
 	public static void main(String[] args) throws Exception {
+		System.out.println("Dimon.main()");
+
 		int port;
 		String ip = null;
 		if (args.length > 0) {

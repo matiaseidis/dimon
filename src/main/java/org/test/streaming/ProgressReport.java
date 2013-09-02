@@ -8,6 +8,7 @@ public class ProgressReport {
 	private long msToComplete = -1;
 	private int progressPct;
 	private long msDownloading;
+	private double bandWidth = 0;
 
 	public ProgressReport(Object target) {
 		this.setTarget(target);
@@ -59,6 +60,14 @@ public class ProgressReport {
 
 	public void setTarget(Object target) {
 		this.target = target;
+	}
+
+	public double getBandWidth() {
+		return bandWidth;
+	}
+
+	public void setBandWidth(double bandWidth) {
+		this.bandWidth = bandWidth;
 	}
 
 }
