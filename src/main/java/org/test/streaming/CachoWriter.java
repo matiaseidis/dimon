@@ -29,8 +29,8 @@ public class CachoWriter implements ChannelFutureListener {
 
 	public void uploadCacho(Channel output, InputStream input, int lenght) throws IOException {
 		this.total = lenght;
-		int b = this.desiredBytesps;
-		long latency = 1000;
+		int b = this.desiredBytesps > 0 ? this.desiredBytesps : 1024 * 256;
+		long latency = this.desiredBytesps > 0 ? 1000 : -1;
 		try {
 			log.debug("Uploading cacho...");
 			int s = lenght / b;
