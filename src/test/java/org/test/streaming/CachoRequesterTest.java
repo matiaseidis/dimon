@@ -2,9 +2,14 @@ package org.test.streaming;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
+
+import javax.imageio.stream.FileImageInputStream;
 
 import junit.framework.Assert;
 
@@ -25,15 +30,27 @@ public class CachoRequesterTest {
 	 */
 	@Test
 	public void testStream() throws Exception {
-		Conf conf = new Conf("/alt-test-conf.properties");
 		String streamOutFileName = "sandonga2.mp4";
+		Conf conf = new Conf("/alt-test-conf.properties");
 		BufferedOutputStream baos = new BufferedOutputStream(new FileOutputStream(new File(streamOutFileName)));
-		new DefaultMovieRetrievalPlanInterpreter(conf.getCachosDir(), conf.getTempDir()).interpret(new DummyMovieRetrievalPlan(conf.get("test.video.file.name"), conf), baos, new ProgressLogger());
+		DummyMovieRetrievalPlan plan = new DummyMovieRetrievalPlan(conf.get("test.video.file.name"), conf);
+		CompositeMovieRetrievalPlan compositeMovieRetrievalPlan = new CompositeMovieRetrievalPlan(plan, 12);
+		new CompositePlanInterpreter(conf.getCachosDir(), conf.getTempDir()).interpret(compositeMovieRetrievalPlan, baos, null);
 		baos.flush();
 		baos.close();
 		File streamedData = new File(streamOutFileName);
 		Assert.assertTrue(streamedData.exists());
 		Assert.assertEquals(Integer.parseInt(conf.get("test.video.file.size")), streamedData.length());
+		DigestInputStream dis = new DigestInputStream(new FileInputStream(streamedData), MessageDigest.getInstance("MD5"));
+		byte[] buffer = new byte[1204 * 256];
+		while (dis.read(buffer) != -1) {
+		}
+		byte[] digest = dis.getMessageDigest().digest();
+		StringBuilder sb = new StringBuilder();
+		for (byte b : digest) {
+			sb.append(String.format("%02X", b));
+		}
+		Assert.assertEquals(conf.get("test.video.md5").toLowerCase(), sb.toString().toLowerCase());
 	}
 
 	/**

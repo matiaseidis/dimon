@@ -15,39 +15,38 @@ public class CachoWriter implements ChannelFutureListener {
 
 	protected static Log log = LogFactory.getLog(CachoWriter.class);
 
-	int readableBytes;
 	int total;
 	int written;
+	int desiredBytesps = -1;
 
 	public CachoWriter() {
+		this(-1);
+	}
+
+	public CachoWriter(int desiredBytesps) {
+		this.desiredBytesps = desiredBytesps;
 	}
 
 	public void uploadCacho(Channel output, InputStream input, int lenght) throws IOException {
 		this.total = lenght;
-		int t = 0;
-		int b = 1024 * 1024 * 4;
+		int b = this.desiredBytesps > 0 ? this.desiredBytesps : 1024 * 256;
+		long latency = this.desiredBytesps > 0 ? 1000 : -1;
 		try {
 			log.debug("Uploading cacho...");
 			int s = lenght / b;
 			int r = lenght % b;
 			for (int i = 0; i < s; i++) {
-				ChannelBuffer outBuffer = ChannelBuffers.buffer(b);
-				outBuffer.writeBytes(input, outBuffer.writableBytes());
-				readableBytes = outBuffer.readableBytes();
-				t += readableBytes;
-				ChannelFuture write = output.write(outBuffer);
-				write.addListener(this);
-				write.removeListener(this);
+				write(output, input, b);
+				if (latency > 0) {
+					Thread.sleep(1000);
+				}
 			}
 
 			if (r != 0) {
-				ChannelBuffer outBuffer = ChannelBuffers.buffer(r);
-				outBuffer.writeBytes(input, outBuffer.writableBytes());
-				readableBytes = outBuffer.readableBytes();
-				t += readableBytes;
-				ChannelFuture write = output.write(outBuffer);
-				write.addListener(this);
-				write.removeListener(this);
+				write(output, input, r);
+				if (latency > 0) {
+					Thread.sleep(1000);
+				}
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -55,13 +54,21 @@ public class CachoWriter implements ChannelFutureListener {
 		} finally {
 			input.close();
 		}
-		log.debug("Uploaded " + t + " bytes.");
+		log.debug("Uploaded " + this.written + " bytes.");
+	}
+
+	private int write(Channel output, InputStream input, int b) throws IOException, InterruptedException {
+		ChannelBuffer outBuffer = ChannelBuffers.buffer(b);
+		outBuffer.writeBytes(input, outBuffer.writableBytes());
+		int readableBytes = outBuffer.readableBytes();
+		output.write(outBuffer).sync();
+		written += readableBytes;
+		double progress = ((double) written / (double) total) * 100d;
+		System.out.println("Written " + written + " " + (total - written) + " to go ( " + progress + "%)");
+		return readableBytes;
 	}
 
 	@Override
 	public void operationComplete(ChannelFuture future) throws Exception {
-		written += readableBytes;
-		double progress = ((double) written / (double) total) * 100d;
-		System.out.println("Written " + written + " " + (total - written) + " to go ( " + progress + "%)");
 	}
 }

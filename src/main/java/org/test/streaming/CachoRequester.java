@@ -13,7 +13,7 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
+import org.jboss.netty.channel.socket.oio.OioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
 
 public class CachoRequester implements ProgressObserver {
@@ -31,7 +31,7 @@ public class CachoRequester implements ProgressObserver {
 		CachoRequest cachoRequest = new CachoRequest(null, movieFileName, zeroBasedFirstBytePosition, amountOfBytes);
 
 		// Configure the client.
-		ClientBootstrap bootstrap = new ClientBootstrap(new NioClientSocketChannelFactory(Executors.newCachedThreadPool(), Executors.newCachedThreadPool()));
+		ClientBootstrap bootstrap = new ClientBootstrap(new OioClientSocketChannelFactory(Executors.newCachedThreadPool()));
 
 		// Set up the pipeline factory.
 		CachoClientPullJandler cachoClientPullJandler = new CachoClientPullJandler(cachoRequest, out);
@@ -53,7 +53,6 @@ public class CachoRequester implements ProgressObserver {
 		// Wait until the connection is closed or the connection attempt fails.
 		ChannelFuture awaitUninterruptibly = future.getChannel().getCloseFuture().awaitUninterruptibly();
 		Throwable cause = awaitUninterruptibly.getCause();
-		System.out.println(cause);
 		// Shut down thread pools to exit.
 		bootstrap.releaseExternalResources();
 		try {

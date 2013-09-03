@@ -44,9 +44,18 @@ public class CachoServerHandler extends SimpleChannelHandler {
 	private CachoRequest currentRequest;
 	private int receivedBytes = 0;
 	private MoviePartMetadata receivingCachoMetadata;
+	private int desiredBytesPerSec = -1;
 
 	public CachoServerHandler(Conf conf) {
 		this.setConf(conf);
+		String string = conf.get("dimon.bytesps");
+		if (string != null) {
+			try {
+				this.desiredBytesPerSec = Integer.parseInt(string);
+			} catch (NumberFormatException e) {
+				System.out.println("Invalid prop dimon.bytesps, expected an integer, got " + string + ", using -1.");
+			}
+		}
 		File cachosDir = this.getConf().getCachosDir();
 		this.setMovieFileLocator(new CompositeMovieFileLocator(new CompleteMovieFileLocator(cachosDir), new CachoMovieFileLocator(cachosDir)));
 	}
@@ -113,7 +122,7 @@ public class CachoServerHandler extends SimpleChannelHandler {
 			RandomAccessFile raf = new RandomAccessFile(mayBeMovieFile.getMovieFile(), "r");
 			raf.seek(mayBeMovieFile.getCacho().getFirstByteIndex());
 			InputStream fileInputStream = new BufferedInputStream(new FileInputStream(raf.getFD()));
-			new CachoWriter().uploadCacho(e.getChannel(), fileInputStream, mayBeMovieFile.getCacho().getLength());
+			new CachoWriter(this.desiredBytesPerSec).uploadCacho(e.getChannel(), fileInputStream, mayBeMovieFile.getCacho().getLength());
 		}
 		e.getChannel().write(ChannelBuffers.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
 	}

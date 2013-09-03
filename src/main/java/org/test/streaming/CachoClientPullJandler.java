@@ -23,12 +23,14 @@ public class CachoClientPullJandler extends CachoClientHandler {
 	}
 
 	@Override
-	public synchronized void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		ChannelBuffer cacho = (ChannelBuffer) e.getMessage();
-		int readableBytes = cacho.readableBytes();
-		cacho.readBytes(this.getOut(), readableBytes);
+		synchronized (this) {
+			int readableBytes = cacho.readableBytes();
+			cacho.readBytes(this.getOut(), readableBytes);
+			this.setAmountOfReceivedBytes(this.getAmountOfReceivedBytes() + readableBytes);
+		}
 		long now = System.currentTimeMillis();
-		this.setAmountOfReceivedBytes(this.getAmountOfReceivedBytes() + readableBytes);
 		int length = this.getCachoRequest().getLength();
 		int remainingBytes = length - this.getAmountOfReceivedBytes();
 		long deltaT = now - this.getFirstChunnkTimestamp();
@@ -36,6 +38,8 @@ public class CachoClientPullJandler extends CachoClientHandler {
 		long remainingTime = remainingBytes * deltaT / this.getAmountOfReceivedBytes();
 		this.setMsToComplete(remainingTime);
 		this.setProgressPct((int) (((double) this.getAmountOfReceivedBytes() / length) * 100));
+		double bw = this.getAmountOfReceivedBytes() / ((double) deltaT / 1000d);
+		this.getProgressReport().setBandWidth(bw);
 		this.getProgressObserver().progressed(this.getProgressReport());
 	}
 
