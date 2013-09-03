@@ -29,43 +29,23 @@ public class CachoWriter implements ChannelFutureListener {
 
 	public void uploadCacho(Channel output, InputStream input, int lenght) throws IOException {
 		this.total = lenght;
-		int b = 1024 * 256 * 2;
+		int b = this.desiredBytesps;
+		long latency = 1000;
 		try {
 			log.debug("Uploading cacho...");
 			int s = lenght / b;
 			int r = lenght % b;
-			long randomJitter = (long) ((b / desiredBytesps) * 1000 * 0.2);
 			for (int i = 0; i < s; i++) {
-				long currentTimeMillis = System.currentTimeMillis();
-				int write = write(output, input, b);
-				long t = System.currentTimeMillis() - currentTimeMillis;
-				if (this.desiredBytesps != -1) {
-					double shouldTake = (write / (double) desiredBytesps) * 1000;
-					long latency = (long) (shouldTake - t);
-					// if (randomJitter < 0) {
-					// randomJitter = Math.max(-randomJitter, latency -
-					// -randomJitter);
-					// }
-					// latency += randomJitter;
-					// randomJitter = -randomJitter;
-					if (latency > 0) {
-						Thread.sleep(latency);
-						System.out.println(write + " took " + t + ", should take " + shouldTake + "ms at " + this.desiredBytesps + ", slept for " + latency);
-					}
+				write(output, input, b);
+				if (latency > 0) {
+					Thread.sleep(1000);
 				}
 			}
 
 			if (r != 0) {
-				long currentTimeMillis = System.currentTimeMillis();
-				int write = write(output, input, r);
-				long t = System.currentTimeMillis() - currentTimeMillis;
-				if (this.desiredBytesps != -1) {
-					int shouldTake = (write / desiredBytesps) * 1000;
-					long millis = (shouldTake - t);
-					if (millis > 0) {
-						Thread.sleep(millis);
-						System.out.println(write + " took " + t + ", should take " + shouldTake + "s at " + this.desiredBytesps + ", slept for " + millis);
-					}
+				write(output, input, r);
+				if (latency > 0) {
+					Thread.sleep(1000);
 				}
 			}
 		} catch (Exception e) {

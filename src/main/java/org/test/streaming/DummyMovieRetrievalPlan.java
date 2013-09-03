@@ -30,7 +30,7 @@ public class DummyMovieRetrievalPlan implements MovieRetrievalPlan {
 		while (totalSize - totalRequested >= requestSize) {
 			daemonPort = 27017 + (amountOfRequests % 3);
 			System.err.println(daemonPort);
-			daemonPort = 10002;
+			daemonPort = 27017;
 			requests.add(new CachoRetrieval(daemonHost, daemonPort, new CachoRequest(null, movieFileName, totalRequested, requestSize)));
 			totalRequested += requestSize;
 			// requestSize = requestSize * 2;
@@ -38,7 +38,7 @@ public class DummyMovieRetrievalPlan implements MovieRetrievalPlan {
 		}
 		System.err.println(daemonPort);
 		daemonPort = 27017 + (amountOfRequests % 3);
-		daemonPort = 10002;
+		daemonPort = 27017;
 		System.out.println(totalSize - totalRequested);
 		if (totalRequested < totalSize) {
 			CachoRetrieval last = requests.get(requests.size() - 1);
