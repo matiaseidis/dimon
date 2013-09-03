@@ -53,7 +53,6 @@ public class CachoRequester implements ProgressObserver {
 		// Wait until the connection is closed or the connection attempt fails.
 		ChannelFuture awaitUninterruptibly = future.getChannel().getCloseFuture().awaitUninterruptibly();
 		Throwable cause = awaitUninterruptibly.getCause();
-		System.out.println(cause);
 		// Shut down thread pools to exit.
 		bootstrap.releaseExternalResources();
 		try {

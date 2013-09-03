@@ -49,6 +49,7 @@ public class Dimon extends SimpleChannelUpstreamHandler {
 		// Bind and start to accept incoming connections.
 		bootstrap.bind(this.ip != null ? new InetSocketAddress(this.ip, port) : new InetSocketAddress(port));
 		log.info("Dimon is ready, awaiting for Cacho requests on port " + this.port + "...");
+		log.info("Target upload bandwith " + conf.get("dimon.bytesps") + " bytes per second");
 		log.info(this.conf.getCachosDir());
 	}
 
@@ -59,8 +60,6 @@ public class Dimon extends SimpleChannelUpstreamHandler {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.out.println("Dimon.main()");
-
 		int port;
 		String ip = null;
 		if (args.length > 0) {

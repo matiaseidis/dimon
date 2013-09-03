@@ -26,7 +26,7 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 	private OnCachoComplete whatToDo;
 	private int firstByte;
 	private boolean cachoDownloaded = false;
-	private boolean streaming = false;
+	private volatile boolean streaming = false;
 
 	public BackgroundCachoStreamer(File shareDir, File cachoFile, OutputStream out, int firstByte, int cachoLength, OnCachoComplete whatToDo) {
 		this.setSharingDir(shareDir);
@@ -44,42 +44,44 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 		log.debug("[" + firstByte + ", " + (cachoLength - 1) + "] (" + cachoLength + ") - Downloading... ");
 	}
 
+	Object closeStreamLock = new Object();
+
 	@Override
 	public void stream() {
-		Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-		synchronized (this) {
+		synchronized (closeStreamLock) {
 			this.setStreaming(true);
-		}
-		log.debug("Streaming " + this.getCachoLength() + " bytes...");
-		if (this.isCachoDownloaded()) {
-			log.debug("Cacho already saved, streaming from file...");
-			try {
-				this.streamCachoFile(this.sharedCachoFile());
-				this.logCacho();
-			} catch (IOException e) {
-				log.error("Stream failed, canceled.");
-				return;
-			}
-		} else {
-			log.debug("Still downloading cacho...");
-			final ChannelBuffer buffer = bufferNextBytes();
-			try {
-				this.streamCachoFile(this.getCachoFile());
-			} catch (IOException e) {
-				log.error("Stream failed, canceled.");
-				return;
-			}
-			this.streamBuffer(buffer);
-			getThreadPool().execute(new Runnable() {
-
-				@Override
-				public void run() {
-					BackgroundCachoStreamer.this.completCachoFile(buffer);
-					cachoDownloaded();
+			log.debug("Streaming " + this.getCachoLength() + " bytes...");
+			if (this.isCachoDownloaded()) {
+				log.debug("Cacho already saved, streaming from file...");
+				try {
+					this.streamCachoFile(this.sharedCachoFile());
+					this.logCacho();
+				} catch (IOException e) {
+					log.error("Stream failed, canceled.");
+					return;
 				}
-			});
+			} else {
+				log.debug("Still downloading cacho...");
+				final ChannelBuffer buffer = bufferNextBytes();
+				try {
+					this.streamCachoFile(this.getCachoFile());
+				} catch (IOException e) {
+					log.error("Stream failed, canceled.");
+					return;
+				}
+				this.streamBuffer(buffer);
+				getThreadPool().execute(new Runnable() {
+
+					@Override
+					public void run() {
+						BackgroundCachoStreamer.this.completCachoFile(buffer);
+						cachoDownloaded();
+						logCacho();
+					}
+				});
+			}
+			this.getWhatToDo().onCachoComplete(this);
 		}
-		this.getWhatToDo().onCachoComplete(this);
 	}
 
 	private void logCacho() {
@@ -165,19 +167,17 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 		}
 	}
 
-	private ChannelBuffer bufferNextBytes() {
+	private synchronized ChannelBuffer bufferNextBytes() {
 		ChannelBuffer buffer;
-		synchronized (this) {
-			try {
-				this.getCurrentOut().close();
-			} catch (IOException e) {
-				log.error("Failed to close initial streamer.", e);
-			}
-			int remain = (int) (this.getCachoLength() - this.getSavedBytes());
-			buffer = ChannelBuffers.buffer(remain);
-			this.setCurrentOut(new ChannelBufferOutputStream(buffer));
-			log.debug("Cacho file contains " + this.getSavedBytes() + " bytes, downloading remaining " + remain + " bytes to memory...");
+		try {
+			this.getCurrentOut().close();
+		} catch (IOException e) {
+			log.error("Failed to close initial streamer.", e);
 		}
+		int remain = (int) (this.getCachoLength() - this.getSavedBytes());
+		buffer = ChannelBuffers.buffer(remain);
+		this.setCurrentOut(new ChannelBufferOutputStream(buffer));
+		log.debug("Cacho file contains " + this.getSavedBytes() + " bytes, downloading remaining " + remain + " bytes to memory...");
 		return buffer;
 	}
 
@@ -188,12 +188,13 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 	}
 
 	@Override
-	public synchronized void close() throws IOException {
-		super.close();
-		log.debug("Downloaded " + this.getSavedBytes() + " bytes.");
-		this.getCurrentOut().close();
-		this.setCachoDownloaded(true);
-		if (!this.isStreaming()) {
+	public void close() throws IOException {
+		synchronized (closeStreamLock) {
+			if (this.isStreaming())
+				return;
+			log.debug("Background Cacho streamer closing... downloaded " + this.getSavedBytes() + " bytes.");
+			this.getCurrentOut().close();
+			this.setCachoDownloaded(true);
 			this.cachoDownloaded();
 		}
 	}

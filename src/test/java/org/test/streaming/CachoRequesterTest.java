@@ -33,7 +33,9 @@ public class CachoRequesterTest {
 		String streamOutFileName = "sandonga2.mp4";
 		Conf conf = new Conf("/alt-test-conf.properties");
 		BufferedOutputStream baos = new BufferedOutputStream(new FileOutputStream(new File(streamOutFileName)));
-		new DefaultMovieRetrievalPlanInterpreter(conf.getCachosDir(), conf.getTempDir()).interpret(new DummyMovieRetrievalPlan(conf.get("test.video.file.name"), conf), baos, new ProgressLogger());
+		DummyMovieRetrievalPlan plan = new DummyMovieRetrievalPlan(conf.get("test.video.file.name"), conf);
+		CompositeMovieRetrievalPlan compositeMovieRetrievalPlan = new CompositeMovieRetrievalPlan(plan, 12);
+		new CompositePlanInterpreter(conf.getCachosDir(), conf.getTempDir()).interpret(compositeMovieRetrievalPlan, baos, null);
 		baos.flush();
 		baos.close();
 		File streamedData = new File(streamOutFileName);

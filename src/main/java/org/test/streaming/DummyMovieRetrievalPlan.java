@@ -3,8 +3,6 @@ package org.test.streaming;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.google.common.collect.Lists;
-
 public class DummyMovieRetrievalPlan implements MovieRetrievalPlan {
 
 	private final String videoId;
@@ -22,8 +20,7 @@ public class DummyMovieRetrievalPlan implements MovieRetrievalPlan {
 
 		int totalSize = Integer.parseInt(conf.get("test.video.file.size"));
 		int totalRequested = 0;
-		int requestSize = totalSize / 5;
-		// int requestSize = 1024 * 1024 * 64;
+		int requestSize = 1024 * 1024 * 2;
 		int amountOfRequests = 0;
 		String movieFileName = conf.get("test.video.file.name");
 		// String daemonHost =
@@ -43,8 +40,10 @@ public class DummyMovieRetrievalPlan implements MovieRetrievalPlan {
 		daemonPort = 27017 + (amountOfRequests % 3);
 		daemonPort = 10002;
 		System.out.println(totalSize - totalRequested);
-		if (totalRequested < totalSize)
-			requests.add(new CachoRetrieval(daemonHost, daemonPort, new CachoRequest(null, movieFileName, totalRequested, totalSize - totalRequested)));
+		if (totalRequested < totalSize) {
+			CachoRetrieval last = requests.get(requests.size() - 1);
+			last.getRequest().getCacho().setLength(last.getRequest().getCacho().getLength() + (totalSize - totalRequested));
+		}
 		// requests = Lists.newLinkedList();
 		// requests.add(new CachoRetrieval(daemonHost, daemonPort, new
 		// CachoRequest(null, movieFileName, 0, totalSize)));

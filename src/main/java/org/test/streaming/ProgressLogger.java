@@ -18,18 +18,20 @@ public class ProgressLogger implements StreamingProgressObserver {
 		}
 	}
 
-	private void print(Map<CachoRequest, ProgressReport> progress) {
+	protected void print(Map<CachoRequest, ProgressReport> progress) {
 		Set<Entry<CachoRequest, ProgressReport>> entrySet = progress.entrySet();
-		double totalBw = 0;
-		for (Entry<CachoRequest, ProgressReport> entry : entrySet) {
-			String firstByteIndex = String.valueOf(entry.getKey().getFirstByteIndex());
-			long msToComplete = entry.getValue().getMsToComplete();
-			String ttg = String.valueOf(msToComplete >= 0 ? msToComplete : "-");
-			double d = entry.getValue().getBandWidth();
-			totalBw += d;
-			System.out.println(firstByteIndex + StringUtils.repeat("-", 15 - firstByteIndex.length()) + entry.getValue().getProgressPct() + "%, " + ttg + " ms to complete, speed: " + d + " Bps");
+		synchronized (progress) {
+			double totalBw = 0;
+			for (Entry<CachoRequest, ProgressReport> entry : entrySet) {
+				String firstByteIndex = String.valueOf(entry.getKey().getFirstByteIndex());
+				long msToComplete = entry.getValue().getMsToComplete();
+				String ttg = String.valueOf(msToComplete >= 0 ? msToComplete : "-");
+				double d = entry.getValue().getBandWidth();
+				totalBw += d;
+				System.out.println(firstByteIndex + StringUtils.repeat("-", 15 - firstByteIndex.length()) + entry.getValue().getProgressPct() + "%, " + ttg + " ms to complete, speed: " + d + " Bps");
+			}
+			System.out.println("Total speed: " + totalBw + " Bps");
 		}
-		System.out.println("Total speed: " + totalBw + " Bps");
 		System.out.println("-------------------------------------------");
 	}
 
@@ -39,8 +41,9 @@ public class ProgressLogger implements StreamingProgressObserver {
 		Set<Entry<CachoRequest, ProgressReport>> entrySet = progress.entrySet();
 		for (Entry<CachoRequest, ProgressReport> entry : entrySet) {
 			String firstByteIndex = String.valueOf(entry.getKey().getFirstByteIndex());
-			String elapsed = String.valueOf(entry.getValue().getMsDownloading());
-			System.out.println(firstByteIndex + StringUtils.repeat("-", 15 - firstByteIndex.length()) + " downloaded in " + elapsed + " ms.");
+			long msDownloading = entry.getValue().getMsDownloading();
+			String elapsed = String.valueOf(msDownloading);
+			System.out.println(firstByteIndex + StringUtils.repeat("-", 15 - firstByteIndex.length()) + " downloaded in " + msDownloading / 1000 + " s.");
 		}
 		System.out.println("-------------------------------------------");
 

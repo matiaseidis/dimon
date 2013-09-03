@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.test.streaming.monitor.Notifier;
@@ -116,9 +117,20 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 			response.addHeader("Content-disposition", "attachment;filename=" + videoId);
 
 			response.flushBuffer();
+			File shareDir = new File("demo/cachos");
+			if (!shareDir.exists()) {
+				FileUtils.forceMkdir(shareDir);
+			}
+			File tempDir = new File("demo/temp");
+			if (!tempDir.exists()) {
+				FileUtils.forceMkdir(tempDir);
+			}
 
 			OutputStream os = response.getOutputStream();
-			new DefaultMovieRetrievalPlanInterpreter(new File("sharedCachos"), new File("tempCachos")).interpret(new DummyMovieRetrievalPlan(videoId, conf), os, new ProgressLogger());
+
+			DummyMovieRetrievalPlan plan = new DummyMovieRetrievalPlan(videoId, conf);
+			CompositeMovieRetrievalPlan compositeMovieRetrievalPlan = new CompositeMovieRetrievalPlan(plan, 6);
+			new CompositePlanInterpreter(shareDir, tempDir).interpret(compositeMovieRetrievalPlan, os, null);
 
 			os.flush();
 			os.close();
