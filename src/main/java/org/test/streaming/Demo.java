@@ -25,6 +25,10 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		Conf conf = new Conf();
+		
+		log.debug("About to close previous plan if exists");
+		LastRetrievalPlanLocator.getInstance().clean();
+		
 		String videoId = request.getParameter(videoParam);
 		if (videoId == null) {
 			videoId = conf.get("test.video.file.name");
@@ -122,7 +126,8 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 			os.flush();
 			os.close();
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			log.debug("About clean resources after client abort", ex);
+			LastRetrievalPlanLocator.getInstance().clean();
 		}
 	}
 

@@ -38,6 +38,9 @@ public class DefaultMovieRetrievalPlanInterpreter implements MovieRetrievalPlanI
 				}
 			}
 		});
+		
+		LastRetrievalPlanLocator.getInstance().addCachoStreamer(firstStreamer);
+		
 		Runnable runnable = new Runnable() {
 
 			@Override
@@ -64,6 +67,7 @@ public class DefaultMovieRetrievalPlanInterpreter implements MovieRetrievalPlanI
 					}
 				}
 			});
+			LastRetrievalPlanLocator.getInstance().addCachoStreamer(cachoStreamer);
 			streamers.add(cachoStreamer);
 			Runnable task = new Runnable() {
 
