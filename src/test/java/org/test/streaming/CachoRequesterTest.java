@@ -38,7 +38,7 @@ public class CachoRequesterTest {
 		new CompositePlanInterpreter(conf.getCachosDir(), conf.getTempDir()).interpret(compositeMovieRetrievalPlan, baos, null);
 		baos.flush();
 		baos.close();
-		File streamedData = new File(streamOutFileName);
+		File streamedData = new File(streamOutFileName);	
 		Assert.assertTrue(streamedData.exists());
 		Assert.assertEquals(Integer.parseInt(conf.get("test.video.file.size")), streamedData.length());
 		DigestInputStream dis = new DigestInputStream(new FileInputStream(streamedData), MessageDigest.getInstance("MD5"));

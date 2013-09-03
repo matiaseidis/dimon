@@ -26,10 +26,9 @@ public class DummyMovieRetrievalPlan implements MovieRetrievalPlan {
 		// String daemonHost =
 		// "ec2-54-212-135-180.us-west-2.compute.amazonaws.com";
 		String daemonHost = "localhost";
-		int daemonPort = 27018;
+		int daemonPort = 27014;
 		while (totalSize - totalRequested >= requestSize) {
-			daemonPort = 27017 + (amountOfRequests % 3);
-			daemonPort = 27015;
+			daemonPort = 27014 + (amountOfRequests % 6);
 			daemonPort = 10002;
 			System.err.println(daemonPort);
 			requests.add(new CachoRetrieval(daemonHost, daemonPort, new CachoRequest(null, movieFileName, totalRequested, requestSize)));
@@ -37,7 +36,7 @@ public class DummyMovieRetrievalPlan implements MovieRetrievalPlan {
 			// requestSize = requestSize * 2;
 			amountOfRequests++;
 		}
-		daemonPort = 27017 + (amountOfRequests % 3);
+		daemonPort = 27017 + (amountOfRequests % 6);
 		daemonPort = 10002;
 		System.err.println(daemonPort);
 		System.out.println(totalSize - totalRequested);
