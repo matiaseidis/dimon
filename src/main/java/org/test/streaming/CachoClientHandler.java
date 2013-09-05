@@ -26,6 +26,7 @@ public class CachoClientHandler extends SimpleChannelHandler {
 		// TODO El server cerro la conexion, no mas bytes disponibles para este
 		// cacho, habria que disparar un mecanismo de busqueda de los bytes que
 		// faltan.
+		log.debug("Channel closed.");
 	}
 
 	@Override

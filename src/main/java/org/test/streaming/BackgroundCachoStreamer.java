@@ -1,5 +1,6 @@
 package org.test.streaming;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -51,9 +52,9 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 	public void stream() {
 		synchronized (closeStreamLock) {
 			this.setStreaming(true);
-			log.debug("Streaming " + this.getCachoLength() + " bytes...");
+			log.debug("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Should stream " + this.getCachoLength() + " bytes...");
 			if (this.isCachoDownloaded()) {
-				log.debug("Cacho already saved, streaming from file...");
+				log.debug("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Cacho already saved, streaming from file...");
 				try {
 					this.streamCachoFile(this.sharedCachoFile());
 					this.logCacho();
@@ -62,7 +63,7 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 					return;
 				}
 			} else {
-				log.debug("Still downloading cacho...");
+				log.debug("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Still downloading cacho...");
 				final ChannelBuffer buffer = bufferNextBytes();
 				try {
 					this.streamCachoFile(this.getCachoFile());
@@ -96,7 +97,7 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 			bufferedOut = new BufferedOutputStream(new FileOutputStream(this.getCachoFile(), true));
 			buffer.readBytes(bufferedOut, buffer.capacity());
 			bufferedOut.flush();
-			log.debug("Cacho file complete with " + buffer.capacity() + " bytes from memory buffer.");
+			log.debug("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Cacho file complete with " + buffer.capacity() + " bytes from memory buffer.");
 			this.logCacho();
 		} catch (FileNotFoundException e) {
 			log.error("Failed to open cacho file " + this.getCachoFile() + ", when trying to append memory buffer.", e);
@@ -144,16 +145,15 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 				}
 			}
 		}
-		log.debug("Streamed " + totalStreamed + " bytes from memory buffer.");
+		log.debug("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Streamed " + totalStreamed + " bytes from memory buffer.");
 	}
 
 	private synchronized void streamCachoFile(File file) throws IOException {
 		FileInputStream cachoFileInputStream = null;
 		try {
-			cachoFileInputStream = new FileInputStream(file);
-			int copy = IOUtils.copy(cachoFileInputStream, this.getOut());
+			long copy = FileUtils.copyFile(file, this.getOut());
 			this.getOut().flush();
-			log.info("Streamed  " + copy + " bytes from cacho file.");
+			log.info("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Streamed  " + copy + " bytes from cacho file.");
 		} catch (FileNotFoundException e1) {
 			log.error("Failed to open cacho flie " + this.sharedCachoFile() + " to stream, nothing will be streamed.", e1);
 		} catch (IOException e) {
@@ -180,7 +180,7 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 		int remain = (int) (this.getCachoLength() - this.getSavedBytes());
 		buffer = ChannelBuffers.buffer(remain);
 		this.setCurrentOut(new ChannelBufferOutputStream(buffer));
-		log.debug("Cacho file contains " + this.getSavedBytes() + " bytes, downloading remaining " + remain + " bytes to memory...");
+		log.debug("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Cacho file contains " + this.getSavedBytes() + " bytes, downloading remaining " + remain + " bytes to memory...");
 		return buffer;
 	}
 
@@ -192,13 +192,13 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 
 	@Override
 	public void close() throws IOException {
+		log.debug("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Background Cacho streamer closing... downloaded " + this.getSavedBytes() + " bytes.");
 		synchronized (closeStreamLock) {
 			if (this.isStreaming())
 				return;
-			log.debug("Background Cacho streamer closing... downloaded " + this.getSavedBytes() + " bytes.");
 			this.getCurrentOut().close();
-			this.setCachoDownloaded(true);
 			this.cachoDownloaded();
+			this.setCachoDownloaded(true);
 		}
 	}
 
