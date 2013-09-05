@@ -38,8 +38,9 @@ public class CachoWriter implements ChannelFutureListener {
 				long t = System.currentTimeMillis();
 				write(output, input, b);
 				long delay = System.currentTimeMillis() - t;
-				if (this.desiredBytesps > 0) {
-					Thread.sleep(1000 - delay);
+				long latency = 1000 - delay;
+				if (this.desiredBytesps > 0 && latency > 0) {
+					Thread.sleep(latency);
 				}
 			}
 
@@ -47,7 +48,8 @@ public class CachoWriter implements ChannelFutureListener {
 				long t = System.currentTimeMillis();
 				write(output, input, r);
 				long delay = System.currentTimeMillis() - t;
-				if (this.desiredBytesps > 0) {
+				long latency = 1000 - delay;
+				if (this.desiredBytesps > 0 && latency > 0) {
 					Thread.sleep(1000 - delay);
 				}
 			}
