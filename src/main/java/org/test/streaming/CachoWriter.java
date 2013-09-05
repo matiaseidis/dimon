@@ -64,7 +64,7 @@ public class CachoWriter implements ChannelFutureListener {
 		ChannelBuffer outBuffer = ChannelBuffers.buffer(b);
 		outBuffer.writeBytes(input, outBuffer.writableBytes());
 		int readableBytes = outBuffer.readableBytes();
-		output.write(outBuffer).sync();
+		output.write(outBuffer).sync().sync();
 		written += readableBytes;
 		double progress = ((double) written / (double) total) * 100d;
 		System.out.println("Written " + written + " " + (total - written) + " to go ( " + progress + "%)");

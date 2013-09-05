@@ -52,6 +52,11 @@ public class CachoRequester implements ProgressObserver {
 		bootstrap.setOption("keepAlive", true);
 		// Wait until the connection is closed or the connection attempt fails.
 		ChannelFuture awaitUninterruptibly = future.getChannel().getCloseFuture().awaitUninterruptibly();
+		int expectedReceivedBytes = cachoRequest.getLength();
+		int amountOfReceivedBytes = this.getProgress().get(cachoRequest).getAmountOfReceivedBytes();
+		if (expectedReceivedBytes != amountOfReceivedBytes) {
+			System.err.println("Fatal, channel closed before all expected bytes are received: " + expectedReceivedBytes + ", but received " + amountOfReceivedBytes);
+		}
 		Throwable cause = awaitUninterruptibly.getCause();
 		// Shut down thread pools to exit.
 		bootstrap.releaseExternalResources();
