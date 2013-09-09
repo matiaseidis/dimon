@@ -4,6 +4,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.test.streaming.Dimon;
+import org.test.streaming.status.StatusHandler;
 
 public class DimonStarterListener implements ServletContextListener {
 
@@ -17,14 +18,16 @@ public class DimonStarterListener implements ServletContextListener {
 		// } catch (Exception e) {
 		// // TODO: handle exception
 		// }
-
+		
+		StatusHandler.getInstance().logStartUp();
 	}
 
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
 		Dimon dimon = (Dimon) sce.getServletContext().getAttribute("dimon");
 		dimon.stop();
-
+		
+		StatusHandler.getInstance().logShutDown();
 	}
 
 }

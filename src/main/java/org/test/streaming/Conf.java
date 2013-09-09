@@ -23,6 +23,7 @@ public class Conf {
 	private String daemonPort = "dimon.port";
 	private String encodingEnabled = "file.encoding.enabled";
 	private String sharingEnabled = "file.sharing.enabled";
+	private String statusLoggerHost = "status.logger.host";
 
 	private Properties properties;
 
@@ -123,6 +124,14 @@ public class Conf {
 
 	public boolean isSharingEnabled() {
 		return Boolean.parseBoolean(get(sharingEnabled));
+	}
+
+	public String getStatusLoggerHost() {
+		return get(statusLoggerHost);
+	}
+
+	public String getUserId() {
+		return this.getDaemonHost()+":"+this.getDaemonPort();
 	}
 
 }

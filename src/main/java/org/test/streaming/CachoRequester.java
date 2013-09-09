@@ -25,6 +25,7 @@ public class CachoRequester implements ProgressObserver {
 	private StreamingProgressObserver progressObserver;
 
 	public CachoRequester() {
+		LastRetrievalPlanLocator.getInstance().addProgress(progress);
 	}
 
 	public void requestCacho(String host, int port, String movieFileName, int zeroBasedFirstBytePosition, int amountOfBytes, final OutputStream out) {
