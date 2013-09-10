@@ -1,0 +1,63 @@
+<<<<<<< HEAD
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+	<display-name>Streaming demo</display-name>
+
+	<listener>
+		<listener-class>org.test.streaming.listener.SharedVideosListener</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>org.test.streaming.listener.DimonStarterListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>play</servlet-name>
+		<servlet-class>org.test.streaming.Demo</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>push</servlet-name>
+		<servlet-class>org.test.streaming.ManualPush</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<servlet-name>user</servlet-name>
+		<servlet-class>org.test.streaming.UserCreator</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>play</servlet-name>
+		<url-pattern>/stream/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>push</servlet-name>
+		<url-pattern>/push/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>user</servlet-name>
+		<url-pattern>/user/*</url-pattern>
+	</servlet-mapping>
+
+	<welcome-file-list>
+		<welcome-file>indexNew.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+
+<web-app version="3.0"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         metadata-complete="false">
+
+         
+</web-app>
+
+>>>>>>> d5b580857d6f8b04f58fbc3eb8959644690a74fe

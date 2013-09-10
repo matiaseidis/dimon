@@ -13,6 +13,7 @@ import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
 import org.jboss.netty.channel.socket.oio.OioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
+import org.test.streaming.status.StatusHandler;
 
 public class Dimon extends SimpleChannelUpstreamHandler {
 	protected static final Log log = LogFactory.getLog(Dimon.class);
@@ -38,9 +39,11 @@ public class Dimon extends SimpleChannelUpstreamHandler {
 		// bootstrap.setOption("sendBufferSize", 1024);
 
 		// Set up the pipeline factory.
+		final CachoServerHandler cachoServerHandler = new CachoServerHandler(conf);
+		StatusHandler.getInstance().setCachoServerHandler(cachoServerHandler);
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline(new ObjectDecoder(), new CachoServerHandler(conf));
+				return Channels.pipeline(new ObjectDecoder(), cachoServerHandler);
 			}
 		});
 		bootstrap.setOption("child.tcpNoDelay", true);

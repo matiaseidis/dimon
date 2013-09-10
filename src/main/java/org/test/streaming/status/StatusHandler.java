@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.test.streaming.CachoRequest;
+import org.test.streaming.CachoServerHandler;
 import org.test.streaming.Conf;
 import org.test.streaming.Dimon;
 import org.test.streaming.LastRetrievalPlanLocator;
@@ -15,33 +16,46 @@ public class StatusHandler {
 	protected static final Log log = LogFactory.getLog(Dimon.class);
 	private static StatusHandler instance = new StatusHandler();
 	private long REPORT_WINDOW = 5000;
-	private Conf conf = null;
+	private static Conf conf = null;
+	private CachoServerHandler cachoServerHandler;
 
 	// statusEvent/{event}/{ip}/{port}/{clientId}
 	private String statusUri = "/statusEvent/%s/%s/%s";
 	// planEvent/{action}/{ip}/{port}/{planId}/{clientId}/{byteCurrent}/{byteFrom}/{byteTo}/{bandWidth}
-	private String planUri = "planEvent/%s/%s/%s/%s/%s/%s/%s/%s/%s";
+	private String planUri = "/planEvent/%s/%s/%s/%s/%s/%s/%s/%s/%s";
 
 	private StatusHandler() {
 	}
+	
+	public StatusHandler init(Conf conf) {
+		setConf(conf);
+		final CachoServerHandler handler = this.getCachoServerHandler();
+		new Thread(new Runnable(){
+			@Override
+			public void run() {
+				while (true) {
 
-	void oo() {
-		while (true) {
+					boolean iddle = handler.getChannelStatus().isEmpty();
 
-			boolean activity = false;
+					if (iddle) {
+						logAlive();
+					} else {
+						logActivities(getActivities());
+					}
 
-			if (activity) {
-				logActivities(getActivities());
-			} else {
-				logAlive();
+					try {
+						Thread.sleep(REPORT_WINDOW);
+					} catch (InterruptedException e) {
+						log.error("inetrrupted on report window wait", e);
+					}
+				}
 			}
+		}).start();
+		return instance;
+	}
 
-			try {
-				Thread.sleep(REPORT_WINDOW);
-			} catch (InterruptedException e) {
-				log.error("inetrrupted on report window wait", e);
-			}
-		}
+	private void setConf(Conf conf) {
+		StatusHandler.conf = conf;
 	}
 
 	private void logActivities(Map<CachoRequest, ProgressReport> activities) {
@@ -53,7 +67,7 @@ public class StatusHandler {
 	}
 
 	private void log(String urlFor) {
-		log.debug("about to notify status logger");
+		log.debug("about to notify status logger: "+urlFor);
 		// TODO make the request
 	}
 
@@ -86,7 +100,7 @@ public class StatusHandler {
 	}
 
 	private String urlFor(String suffix) {
-		return "http://" + conf.getStatusLoggerHost() + "/" + suffix;
+		return "http://" + conf.getStatusLoggerHost() + suffix;
 	}
 
 	private String status(String status) {
@@ -114,6 +128,15 @@ public class StatusHandler {
 
 	public static StatusHandler getInstance() {
 		return instance;
+	}
+
+	public void setCachoServerHandler(CachoServerHandler cachoServerHandler) {
+		this.cachoServerHandler = cachoServerHandler;
+		
+	}
+
+	public CachoServerHandler getCachoServerHandler() {
+		return cachoServerHandler;
 	}
 
 }
