@@ -1,5 +1,6 @@
 package org.test.streaming.status;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -26,21 +27,26 @@ public class StatusHandler {
 
 	private StatusHandler() {
 	}
-	
+
 	public StatusHandler init(Conf conf) {
 		setConf(conf);
-		final CachoServerHandler handler = this.getCachoServerHandler();
-		new Thread(new Runnable(){
+		// final CachoServerHandler handler = this.getCachoServerHandler();
+		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				while (true) {
 
-					boolean iddle = handler.getChannelStatus().isEmpty();
+					int currentActivities = LastRetrievalPlanLocator
+							.getInstance().getProgress().size();
+
+					log.debug("about to total activities: " + currentActivities);
+					boolean iddle = currentActivities == 0;
 
 					if (iddle) {
 						logAlive();
 					} else {
-						logActivities(getActivities());
+						logActivities(LastRetrievalPlanLocator.getInstance()
+								.getProgress());
 					}
 
 					try {
@@ -60,29 +66,40 @@ public class StatusHandler {
 
 	private void logActivities(Map<CachoRequest, ProgressReport> activities) {
 
+		Map<CachoRequest, ProgressReport> completed = new HashMap<CachoRequest, ProgressReport>();
 		for (Map.Entry<CachoRequest, ProgressReport> cachoProgress : activities
 				.entrySet()) {
-			log(urlFor(activity(cachoProgress)));
+
+			log.debug("about to log progress perc. "
+					+ cachoProgress.getValue().getProgressPct());
+			if (cachoProgress.getValue().getProgressPct() < 100) {
+				log(urlFor(activity(cachoProgress)));
+			} else {
+				completed.put(cachoProgress.getKey(), cachoProgress.getValue());
+			}
+		}
+		if (!completed.isEmpty()) {
+			log.debug("about to remove " + completed.size()
+					+ " cachos already completed");
+			for (CachoRequest cachoCompleted : completed.keySet()) {
+				LastRetrievalPlanLocator.getInstance().getProgress()
+						.remove(cachoCompleted);
+			}
 		}
 	}
 
 	private void log(String urlFor) {
-		log.debug("about to notify status logger: "+urlFor);
-		// TODO make the request
-	}
-
-	private Map<CachoRequest, ProgressReport> getActivities() {
-		return LastRetrievalPlanLocator.getInstance().getProgress();
+		log.debug("about to notify status logger: " + urlFor);
 	}
 
 	private void logAlive() {
 		log(urlFor(status(alive())));
 	}
-	
+
 	public void logStartUp() {
 		log(urlFor(status(up())));
 	}
-	
+
 	public void logShutDown() {
 		log(urlFor(status(down())));
 	}
@@ -108,7 +125,6 @@ public class StatusHandler {
 				conf.getDaemonPort(), conf.getUserId());
 	}
 
-	// planEvent/{action}/{ip}/{port}/{planId}/{clientId}/{byteCurrent}/{byteFrom}/{byteTo}/{bandWidth}
 	private String activity(
 			Map.Entry<CachoRequest, ProgressReport> cachoProgress) {
 
@@ -116,14 +132,15 @@ public class StatusHandler {
 		ProgressReport progress = cachoProgress.getValue();
 		String action = request.getDirection().name();
 		String planId = LastRetrievalPlanLocator.getInstance().getPlanId();
-		int byteCurrent = progress.getAmountOfReceivedBytes() + request.getCacho().getFirstByteIndex();
+		int byteCurrent = progress.getAmountOfReceivedBytes()
+				+ request.getCacho().getFirstByteIndex();
 		int byteFrom = request.getCacho().getFirstByteIndex();
 		int byteTo = request.getCacho().getLastByteIndex();
 		double bandWidth = progress.getBandWidth();
 
 		return String.format(this.planUri, action, conf.getDaemonHost(),
-				conf.getDaemonPort(), planId, conf.getUserId(), byteCurrent, byteFrom,
-				byteTo, bandWidth);
+				conf.getDaemonPort(), planId, conf.getUserId(), byteCurrent,
+				byteFrom, byteTo, bandWidth);
 	}
 
 	public static StatusHandler getInstance() {
@@ -132,7 +149,7 @@ public class StatusHandler {
 
 	public void setCachoServerHandler(CachoServerHandler cachoServerHandler) {
 		this.cachoServerHandler = cachoServerHandler;
-		
+
 	}
 
 	public CachoServerHandler getCachoServerHandler() {

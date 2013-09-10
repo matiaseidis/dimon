@@ -63,9 +63,12 @@ public class CachoServerHandler extends SimpleChannelHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		CachoDirection cachoDirection = this.getChannelStatus().get(e.getChannel());
+		log.debug("About to add channel to channelStatus..."+cachoDirection.name());
+		
 		if (cachoDirection == null) {
 			log.debug("Message arrived thru a new channel, starting up...");
 			CachoRequest request = (CachoRequest) e.getMessage();
+			log.debug("About to add channel to channelStatus...");
 			this.getChannelStatus().put(e.getChannel(), request.getDirection());
 			cachoDirection = request.getDirection();
 			if (cachoDirection == CachoDirection.PULL) {

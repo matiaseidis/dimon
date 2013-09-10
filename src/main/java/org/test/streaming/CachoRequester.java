@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.Executors;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelPipeline;
@@ -15,8 +17,12 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
+import org.test.streaming.status.StatusHandler;
 
 public class CachoRequester implements ProgressObserver {
+	
+	protected static final Log log = LogFactory.getLog(CachoRequester.class);
+
 
 	private Map<CachoRequest, ProgressReport> progress = Collections.synchronizedMap(new TreeMap<CachoRequest, ProgressReport>());
 	/**
@@ -25,7 +31,8 @@ public class CachoRequester implements ProgressObserver {
 	private StreamingProgressObserver progressObserver;
 
 	public CachoRequester() {
-		LastRetrievalPlanLocator.getInstance().addProgress(progress);
+		log.debug("about to register progress:" + progress.size());
+//		LastRetrievalPlanLocator.getInstance().addProgress(progress);
 	}
 
 	public void requestCacho(String host, int port, String movieFileName, int zeroBasedFirstBytePosition, int amountOfBytes, final OutputStream out) {
@@ -37,8 +44,13 @@ public class CachoRequester implements ProgressObserver {
 		// Set up the pipeline factory.
 		CachoClientPullJandler cachoClientPullJandler = new CachoClientPullJandler(cachoRequest, out);
 		cachoClientPullJandler.setProgressObserver(this);
-		this.getProgress().put(cachoRequest, cachoClientPullJandler.getProgressReport());
-
+		
+		CachoRequest key = cachoRequest;
+		ProgressReport value = cachoClientPullJandler.getProgressReport();
+		
+		this.getProgress().put(key, value);
+		LastRetrievalPlanLocator.getInstance().getProgress().put(key, value);
+		
 		final ChannelPipeline pipeline = Channels.pipeline(new ObjectEncoder(), cachoClientPullJandler);
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			public ChannelPipeline getPipeline() throws Exception {
@@ -71,7 +83,10 @@ public class CachoRequester implements ProgressObserver {
 
 	@Override
 	public void progressed(ProgressReport progressReport) {
-		this.getProgress().put((CachoRequest) progressReport.getTarget(), progressReport);
+		CachoRequest key = (CachoRequest) progressReport.getTarget();
+		ProgressReport value = progressReport;
+		this.getProgress().put(key, value);
+		LastRetrievalPlanLocator.getInstance().getProgress().put(key, value);
 		if (this.getProgressObserver() != null) {
 			this.getProgressObserver().progressed(this.getProgress());
 		}

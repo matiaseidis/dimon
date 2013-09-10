@@ -13,16 +13,18 @@ public class LastRetrievalPlanLocator {
 	
 	protected static final Log log = LogFactory.getLog(LastRetrievalPlanLocator.class);
 	
-	private static final LastRetrievalPlanLocator INSTANCE = new LastRetrievalPlanLocator();
+	private static final LastRetrievalPlanLocator instance = new LastRetrievalPlanLocator();
 	private final List<CachoStreamer> streamers = new ArrayList<CachoStreamer>();
-	private Map<CachoRequest, ProgressReport> progress = new HashMap<CachoRequest, ProgressReport>();
+//	private final List<Map<CachoRequest, ProgressReport>> progress = new ArrayList<Map<CachoRequest, ProgressReport>>();
+	
+	private final Map<CachoRequest, ProgressReport> progress = new HashMap<CachoRequest, ProgressReport>();
 	
 	private LastRetrievalPlanLocator(){
 		log.debug("LastRetrievalPlanLocator created");
 	}
 	
 	public static LastRetrievalPlanLocator getInstance() {
-		return INSTANCE;
+		return instance;
 	}
 
 	public List<CachoStreamer> getStreamers() {
@@ -52,17 +54,15 @@ public class LastRetrievalPlanLocator {
 		return "plan-id";
 	}
 
-	public void addProgress(Map<CachoRequest, ProgressReport> progress) {
-		// TODO Auto-generated method stub
-		
-	}
+//	public List<Map<CachoRequest, ProgressReport>> getProgress() {
+//		return progress;
+//	}
+//
+//	public void addProgress(Map<CachoRequest, ProgressReport> p) {
+//		this.getProgress().add(p);
+//	}
 
 	public Map<CachoRequest, ProgressReport> getProgress() {
 		return progress;
 	}
-
-	public void setProgress(Map<CachoRequest, ProgressReport> progress) {
-		this.progress = progress;
-	}
-
 }
