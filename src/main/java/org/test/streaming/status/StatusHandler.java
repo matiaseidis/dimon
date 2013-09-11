@@ -21,7 +21,7 @@ public class StatusHandler {
 	private CachoServerHandler cachoServerHandler;
 
 	// statusEvent/{event}/{ip}/{port}/{clientId}
-	private String statusUri = "/statusEvent/%s/%s/%s";
+	private String statusUri = "/statusEvent/%s/%s/%s/%s";
 	// planEvent/{action}/{ip}/{port}/{planId}/{clientId}/{byteCurrent}/{byteFrom}/{byteTo}/{bandWidth}
 	private String planUri = "/planEvent/%s/%s/%s/%s/%s/%s/%s/%s/%s";
 
@@ -121,8 +121,9 @@ public class StatusHandler {
 	}
 
 	private String status(String status) {
+		long bandWidth = 123;
 		return String.format(statusUri, status, conf.getDaemonHost(),
-				conf.getDaemonPort(), conf.getUserId());
+				conf.getDaemonPort(), conf.getUserId(), bandWidth);
 	}
 
 	private String activity(
