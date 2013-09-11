@@ -1,10 +1,14 @@
 package org.test.streaming.status;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.fluent.Content;
+import org.apache.http.client.fluent.Request;
 import org.test.streaming.CachoRequest;
 import org.test.streaming.CachoServerHandler;
 import org.test.streaming.Conf;
@@ -26,6 +30,7 @@ public class StatusHandler {
 	private String planUri = "/planEvent/%s/%s/%s/%s/%s/%s/%s/%s/%s";
 
 	private StatusHandler() {
+		
 	}
 
 	public StatusHandler init(Conf conf) {
@@ -88,8 +93,23 @@ public class StatusHandler {
 		}
 	}
 
-	private void log(String urlFor) {
+	private Content log(String urlFor) {
 		log.debug("about to notify status logger: " + urlFor);
+		Content content = launch(request(urlFor));
+		return content;
+	}
+
+	private Content launch(Request request) {
+		try {
+			return request.execute().returnContent();
+		} catch (IOException e) {
+			log.error("unable to perform request to "+request.toString()+" - "+e.getMessage());
+		} 
+		return null;
+	}
+
+	private Request request(String url) {
+		return Request.Get(url);
 	}
 
 	private void logAlive() {
