@@ -105,7 +105,7 @@ public class StatusHandler {
 	private Content launch(Request request) {
 		try {
 			return request.execute().returnContent();
-		} catch (IOException e) {
+		} catch (Throwable e) {
 			log.error("unable to perform request to " + request.toString()
 					+ " - " + e.getMessage());
 		}
@@ -144,13 +144,15 @@ public class StatusHandler {
 	}
 
 	private String urlFor(String suffix) {
-		String toEncode = "http://" + conf.getStatusLoggerHost() + conf.getStatusLoggerServiceUri() + suffix;
+		String preffix = "http://" + conf.getStatusLoggerHost() + conf.getStatusLoggerServiceUri();
+		String encodedSuffix = null;
 		try {
-			return URLEncoder.encode(toEncode, "UTF-8");
+			encodedSuffix = URLEncoder.encode(suffix, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
-			log.error("unable to encode url: "+toEncode, e);
-			return null;
+			log.error("unable to encode url: "+suffix, e);
+			encodedSuffix = suffix;
 		}
+		return preffix + encodedSuffix;
 	}
 
 	private String status(String status) {
