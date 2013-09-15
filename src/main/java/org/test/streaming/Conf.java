@@ -24,6 +24,8 @@ public class Conf {
 	private String encodingEnabled = "file.encoding.enabled";
 	private String sharingEnabled = "file.sharing.enabled";
 	private String statusLoggerHost = "status.logger.host";
+	private String statusReportEnabled = "status.logger.enabled";
+	private String statusLoggerServiceUri = "status.logger.service.uri";
 
 	private Properties properties;
 
@@ -132,6 +134,14 @@ public class Conf {
 
 	public String getUserId() {
 		return this.getDaemonHost()+":"+this.getDaemonPort();
+	}
+
+	public boolean isStatusReportEnabled() {
+		return Boolean.parseBoolean(get(statusReportEnabled));
+	}
+
+	public String getStatusLoggerServiceUri() {
+		return get(statusLoggerServiceUri );
 	}
 
 }

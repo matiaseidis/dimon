@@ -1,0 +1,42 @@
+#mainBox {
+	
+}
+#playerBox {
+	float:left;
+	width:50%;
+}
+#progressBox {
+	width:50%;
+	float:left;
+//	padding-left:50%;
+}
+#outerBox {
+//	background-color:red;
+font-size:10px;
+width:300px;
+}
+#pullerBox {
+	float:left;
+	width:280px;
+}
+#pushersBox {
+//	padding-left: 300px;
+//	margin-left:15px;
+width:300px;
+}
+.bold {
+	font-weight:bold;
+}
+.pusherBox, #pullerBox {
+	margin: 10px;
+//	border: 1px solid #666;
+} 
+#pullerBox {
+//	background-color:green;
+}
+.pusherBox{
+//	background-color:yellow;
+width:130px;
+float:left;
+height:40px;
+}

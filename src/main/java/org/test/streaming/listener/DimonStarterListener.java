@@ -18,6 +18,7 @@ public class DimonStarterListener implements ServletContextListener {
 		try {
 			Conf conf = new Conf();
 			Dimon dimon = new Dimon(conf.getDaemonHost(), conf.getDaemonPort());
+			sce.getServletContext().setAttribute("conf", conf);
 			sce.getServletContext().setAttribute("dimon", dimon);
 			dimon.run();
 			StatusHandler.getInstance().init(conf).logStartUp();

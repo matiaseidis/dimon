@@ -30,38 +30,43 @@ public class StatusHandler {
 	private String planUri = "/planEvent/%s/%s/%s/%s/%s/%s/%s/%s/%s";
 
 	private StatusHandler() {
-		
+
 	}
 
 	public StatusHandler init(Conf conf) {
 		setConf(conf);
 		// final CachoServerHandler handler = this.getCachoServerHandler();
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				while (true) {
+		if (conf.isStatusReportEnabled()) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					while (true) {
 
-					int currentActivities = LastRetrievalPlanLocator
-							.getInstance().getProgress().size();
+						int currentActivities = LastRetrievalPlanLocator
+								.getInstance().getProgress().size();
 
-					log.debug("about to total activities: " + currentActivities);
-					boolean iddle = currentActivities == 0;
+						log.debug("about to total activities: "
+								+ currentActivities);
+						boolean iddle = currentActivities == 0;
 
-					if (iddle) {
-						logAlive();
-					} else {
-						logActivities(LastRetrievalPlanLocator.getInstance()
-								.getProgress());
-					}
+						if (iddle) {
+							logAlive();
+						} else {
+							logActivities(LastRetrievalPlanLocator
+									.getInstance().getProgress());
+						}
 
-					try {
-						Thread.sleep(REPORT_WINDOW);
-					} catch (InterruptedException e) {
-						log.error("inetrrupted on report window wait", e);
+						try {
+							Thread.sleep(REPORT_WINDOW);
+						} catch (InterruptedException e) {
+							log.error("inetrrupted on report window wait", e);
+						}
 					}
 				}
-			}
-		}).start();
+			}).start();
+		} else {
+			log.info("status report is disabled");
+		}
 		return instance;
 	}
 
@@ -70,6 +75,10 @@ public class StatusHandler {
 	}
 
 	private void logActivities(Map<CachoRequest, ProgressReport> activities) {
+		
+		if(!StatusHandler.conf.isStatusReportEnabled()){
+			return;
+		}
 
 		Map<CachoRequest, ProgressReport> completed = new HashMap<CachoRequest, ProgressReport>();
 		for (Map.Entry<CachoRequest, ProgressReport> cachoProgress : activities
@@ -103,8 +112,9 @@ public class StatusHandler {
 		try {
 			return request.execute().returnContent();
 		} catch (IOException e) {
-			log.error("unable to perform request to "+request.toString()+" - "+e.getMessage());
-		} 
+			log.error("unable to perform request to " + request.toString()
+					+ " - " + e.getMessage());
+		}
 		return null;
 	}
 
@@ -113,6 +123,9 @@ public class StatusHandler {
 	}
 
 	private void logAlive() {
+		if(!StatusHandler.conf.isStatusReportEnabled()){
+			return;
+		}
 		log(urlFor(status(alive())));
 	}
 
