@@ -28,7 +28,10 @@ public class Conf {
 	private String statusLoggerServiceUri = "status.logger.service.uri";
 
 	private Properties properties;
-
+	private String statusLoggerServiceReportActivitySuffix = "status.logger.service.suffix.statusReport";
+	private String statusLoggerServiceReportStateSuffix = "status.logger.service.suffix.activityReport";
+	private String statusLoggerServicePlanSuffix = "status.logger.service.suffix.plan";
+	
 	public Conf(String confPath) {
 		this.confPath = confPath;
 		this.setUp();
@@ -143,5 +146,17 @@ public class Conf {
 	public String getStatusLoggerServiceUri() {
 		return get(statusLoggerServiceUri );
 	}
-
+	
+	public String getStatusLoggerServicePlanSuffix(){
+		return this.get(statusLoggerServicePlanSuffix);
+	}
+	
+	public String getStatusLoggerServiceReportActivitySuffix(){
+		return this.get(statusLoggerServiceReportActivitySuffix);
+	}
+	
+	public String getStatusLoggerServiceReportStateSuffix(){
+		return this.get(statusLoggerServiceReportStateSuffix);
+	}
+	
 }

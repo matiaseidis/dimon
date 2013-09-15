@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Request;
 import org.test.streaming.CachoRequest;
@@ -24,14 +23,7 @@ public class StatusHandler {
 	private static Conf conf = null;
 	private CachoServerHandler cachoServerHandler;
 
-	// statusEvent/{event}/{ip}/{port}/{clientId}
-	private String statusUri = "/statusEvent/%s/%s/%s/%s";
-	// planEvent/{action}/{ip}/{port}/{planId}/{clientId}/{byteCurrent}/{byteFrom}/{byteTo}/{bandWidth}
-	private String planUri = "/planEvent/%s/%s/%s/%s/%s/%s/%s/%s/%s";
-
-	private StatusHandler() {
-
-	}
+	private StatusHandler() {}
 
 	public StatusHandler init(Conf conf) {
 		setConf(conf);
@@ -150,12 +142,12 @@ public class StatusHandler {
 	}
 
 	private String urlFor(String suffix) {
-		return "http://" + conf.getStatusLoggerHost() + suffix;
+		return "http://" + conf.getStatusLoggerHost() + conf.getStatusLoggerServiceUri() + suffix;
 	}
 
 	private String status(String status) {
 		long bandWidth = 123;
-		return String.format(statusUri, status, conf.getDaemonHost(),
+		return String.format(conf.getStatusLoggerServiceReportStateSuffix(), status, conf.getDaemonHost(),
 				conf.getDaemonPort(), conf.getUserId(), bandWidth);
 	}
 
@@ -172,7 +164,7 @@ public class StatusHandler {
 		int byteTo = request.getCacho().getLastByteIndex();
 		double bandWidth = progress.getBandWidth();
 
-		return String.format(this.planUri, action, conf.getDaemonHost(),
+		return String.format(conf.getStatusLoggerServiceReportActivitySuffix(), action, conf.getDaemonHost(),
 				conf.getDaemonPort(), planId, conf.getUserId(), byteCurrent,
 				byteFrom, byteTo, bandWidth);
 	}

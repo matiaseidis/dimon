@@ -23,7 +23,7 @@ public class Progress extends HttpServlet {
 			throws ServletException, IOException {
 
 		Conf conf = (Conf)this.getServletContext().getAttribute("conf");
-		String url = "http://"+conf.getStatusLoggerHost()+conf.getStatusLoggerServiceUri();
+		String url = "http://"+conf.getStatusLoggerHost()+conf.getStatusLoggerServiceUri()+conf.getStatusLoggerServicePlanSuffix();
 		Response progressResponse = Request.Get(url).execute();
 		resp.setContentType("application/json");
 		String jsonProgress = new String(progressResponse.returnContent().asBytes());
