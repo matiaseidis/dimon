@@ -157,17 +157,8 @@ public class StatusHandler {
 				status, 
 				conf.getDaemonHost(),
 				conf.getDaemonPort(), 
-				this.encode(conf.getUserId()), 
-				this.encode(Long.toString(bandWidth)));
-	}
-
-	private String encode(String s) {
-		try {
-			return URLEncoder.encode(s, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			log.error("unable to encode: "+s, e);
-		}
-		return null;
+				conf.getUserId(), 
+				Long.toString(bandWidth));
 	}
 
 	private String activity(
@@ -193,7 +184,7 @@ public class StatusHandler {
 				byteCurrent,
 				byteFrom, 
 				byteTo, 
-				this.encode(Double.toString(bandWidth)) 
+				Double.toString(bandWidth) 
 				);
 	}
 
