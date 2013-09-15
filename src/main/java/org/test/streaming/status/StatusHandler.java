@@ -1,6 +1,8 @@
 package org.test.streaming.status;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -142,13 +144,26 @@ public class StatusHandler {
 	}
 
 	private String urlFor(String suffix) {
-		return "http://" + conf.getStatusLoggerHost() + conf.getStatusLoggerServiceUri() + suffix;
+		String toEncode = "http://" + conf.getStatusLoggerHost() + conf.getStatusLoggerServiceUri() + suffix;
+		try {
+			return URLEncoder.encode(toEncode, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			log.error("unable to encode url: "+toEncode, e);
+			return null;
+		}
 	}
 
 	private String status(String status) {
 		long bandWidth = 123;
-		return String.format(conf.getStatusLoggerServiceReportStateSuffix(), status, conf.getDaemonHost(),
-				conf.getDaemonPort(), conf.getUserId(), bandWidth);
+		//#statusReport/{event}/{ip}/{port}/{clientId}/{bandWidth}
+		//status.logger.service.suffix.statusReport=statusReport/%s/%s/%s/%s/%s
+		return String.format(
+				conf.getStatusLoggerServiceReportStateSuffix(), 
+				status, 
+				conf.getDaemonHost(),
+				conf.getDaemonPort(), 
+				conf.getUserId(), 
+				bandWidth);
 	}
 
 	private String activity(

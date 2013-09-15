@@ -21,4 +21,9 @@ public class ManualPushRetrievalPlan implements MovieRetrievalPlan {
 		return videoId;
 	}
 
+	@Override
+	public String getPlanId() {
+		return this.getVideoId();
+	}
+
 }

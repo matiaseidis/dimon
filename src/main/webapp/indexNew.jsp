@@ -21,6 +21,7 @@ if(file != null){
 %>
 
 <script>
+console.log(<%=(String)request.getAttribute("planId")%>);
 var p=flowplayer('player', 'flowplayer-new/flowplayer-3.2.16.swf', {
 	log: { level: 'debug', filter: 'org.flowplayer.captions.*' },
     clip: {

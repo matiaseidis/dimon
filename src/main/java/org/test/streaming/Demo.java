@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -13,7 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.test.streaming.monitor.Notifier;
 
-public class Demo extends javax.servlet.http.HttpServlet implements javax.servlet.Servlet {
+public class Demo extends HttpServlet {
 
 	protected static final Log log = LogFactory.getLog(Demo.class);
 
@@ -35,7 +36,7 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 			videoId = conf.get("test.video.file.name");
 			try {
 				int fileSize = Integer.parseInt(conf.get("test.video.file.size"));
-				downloadFile(response, videoId, fileSize, conf);
+				downloadFile(request, response, videoId, fileSize, conf);
 			} catch (Exception e) {
 				log.error(e);
 			}
@@ -112,7 +113,7 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 		doGet(req, resp);
 	}
 
-	public void downloadFile(HttpServletResponse response, String videoId, int videoSize, Conf conf) throws Exception {
+	public void downloadFile(HttpServletRequest request, HttpServletResponse response, String videoId, int videoSize, Conf conf) throws Exception {
 		try {
 			System.out.println("Buffer size: " + response.getBufferSize());
 			response.setBufferSize(bufferSize);
@@ -133,6 +134,7 @@ public class Demo extends javax.servlet.http.HttpServlet implements javax.servle
 			OutputStream os = response.getOutputStream();
 
 			DummyMovieRetrievalPlan plan = new DummyMovieRetrievalPlan(videoId, conf);
+			request.setAttribute("planId", plan.getPlanId());
 			CompositeMovieRetrievalPlan compositeMovieRetrievalPlan = new CompositeMovieRetrievalPlan(plan, 6);
 			new CompositePlanInterpreter(shareDir, tempDir).interpret(compositeMovieRetrievalPlan, os, null);
 

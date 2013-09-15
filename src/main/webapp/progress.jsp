@@ -13,7 +13,6 @@ if(conf.isStatusReportEnabled()) {
 <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css" media="all" />
 
 <h2>Plan: demo</h2>
-<% System.out.println("22 " + request.getParameter("progress"));  %>
 
 	<div id="outerBox">
 		<div id="pullerBox"></div>
@@ -22,7 +21,7 @@ if(conf.isStatusReportEnabled()) {
 
 	<script type="text/javascript">
 		$(function() {
-			drawPlan();		
+			drawPlan(<%=request.getAttribute("planId")%>);		
 		});
 	</script>
 

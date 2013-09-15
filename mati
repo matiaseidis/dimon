@@ -1,0 +1,473 @@
+[INFO] Scanning for projects...
+[INFO]                                                                         
+[INFO] ------------------------------------------------------------------------
+[INFO] Building streaming Maven Webapp 0.0.1-SNAPSHOT
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] >>> maven-jetty-plugin:6.1.10:run (default-cli) @ streaming-client >>>
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ streaming-client ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 5 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.4:compile (default-compile) @ streaming-client ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ streaming-client ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 3 resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.4:testCompile (default-testCompile) @ streaming-client ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] <<< maven-jetty-plugin:6.1.10:run (default-cli) @ streaming-client <<<
+[INFO] 
+[INFO] --- maven-jetty-plugin:6.1.10:run (default-cli) @ streaming-client ---
+[INFO] Configuring Jetty for project: streaming Maven Webapp
+[INFO] Webapp source directory = /home/us/dev/cachos/dimon/src/main/webapp
+[INFO] web.xml file = /home/us/dev/cachos/dimon/src/main/webapp/WEB-INF/web.xml
+[INFO] Classes = /home/us/dev/cachos/dimon/target/classes
+[INFO] Logging to org.slf4j.impl.SimpleLogger(org.mortbay.log) via org.mortbay.log.Slf4jLog
+[INFO] Context path = /
+[INFO] Tmp directory =  determined at runtime
+[INFO] Web defaults = org/mortbay/jetty/webapp/webdefault.xml
+[INFO] Web overrides =  none
+[INFO] Webapp directory = /home/us/dev/cachos/dimon/src/main/webapp
+[INFO] Starting jetty 6.1.10 ...
+[INFO] jetty-6.1.10
+[INFO] No Transaction manager found - if your webapp requires one, please configure one.
+ INFO [main] (SharedVideosListener.java:28) - SHARING ENABLED
+DEBUG [main] (SharedVideosMonitor.java:54) - SharedVideosListener.begin()
+ INFO [main] (LibraryBasedMovieFileLocator.java:21) - Library path: /home/us/app-root/data/files/cachos
+ INFO [main] (LibraryBasedMovieFileLocator.java:21) - Library path: /home/us/app-root/data/files/cachos
+ INFO [main] (Dimon.java:54) - Dimon is ready, awaiting for Cacho requests on port 10002...
+ INFO [main] (Dimon.java:55) - Target upload bandwith 31250 bytes per second
+ INFO [main] (Dimon.java:56) - /home/us/app-root/data/files/cachos
+DEBUG [Thread-7] (LastRetrievalPlanLocator.java:22) - LastRetrievalPlanLocator created
+DEBUG [Thread-7] (StatusHandler.java:42) - about to total activities: 0
+DEBUG [Thread-7] (StatusHandler.java:100) - about to notify status logger: http%3A%2F%2Flocalhost%3A8081%2Fservice%2Flogger%2FstatusReport%2FALIVE%2Flocalhost%2F10002%2Flocalhost%3A10002%2F123
+DEBUG [main] (StatusHandler.java:100) - about to notify status logger: http%3A%2F%2Flocalhost%3A8081%2Fservice%2Flogger%2FstatusReport%2FUP%2Flocalhost%2F10002%2Flocalhost%3A10002%2F123
+ERROR [main] (DimonStarterListener.java:26) - unable to start Dimon
+java.lang.IllegalStateException: Target host must not be null, or set in parameters.
+	at org.apache.http.impl.client.DefaultRequestDirector.determineRoute(DefaultRequestDirector.java:787)
+	at org.apache.http.impl.client.DefaultRequestDirector.execute(DefaultRequestDirector.java:414)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:906)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:805)
+	at org.apache.http.impl.client.AbstractHttpClient.execute(AbstractHttpClient.java:784)
+	at org.apache.http.client.fluent.Request.execute(Request.java:145)
+	at org.test.streaming.status.StatusHandler.launch(StatusHandler.java:107)
+	at org.test.streaming.status.StatusHandler.log(StatusHandler.java:101)
+	at org.test.streaming.status.StatusHandler.logStartUp(StatusHandler.java:127)
+	at org.test.streaming.listener.DimonStarterListener.contextInitialized(DimonStarterListener.java:24)
+	at org.mortbay.jetty.handler.ContextHandler.startContext(ContextHandler.java:540)
+	at org.mortbay.jetty.servlet.Context.startContext(Context.java:135)
+	at org.mortbay.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1220)
+	at org.mortbay.jetty.handler.ContextHandler.doStart(ContextHandler.java:510)
+	at org.mortbay.jetty.webapp.WebAppContext.doStart(WebAppContext.java:448)
+	at org.mortbay.jetty.plugin.Jetty6PluginWebAppContext.doStart(Jetty6PluginWebAppContext.java:110)
+	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:39)
+	at org.mortbay.jetty.handler.HandlerCollection.doStart(HandlerCollection.java:152)
+	at org.mortbay.jetty.handler.ContextHandlerCollection.doStart(ContextHandlerCollection.java:156)
+	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:39)
+	at org.mortbay.jetty.handler.HandlerCollection.doStart(HandlerCollection.java:152)
+	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:39)
+	at org.mortbay.jetty.handler.HandlerWrapper.doStart(HandlerWrapper.java:130)
+	at org.mortbay.jetty.Server.doStart(Server.java:222)
+	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:39)
+	at org.mortbay.jetty.plugin.Jetty6PluginServer.start(Jetty6PluginServer.java:132)
+	at org.mortbay.jetty.plugin.AbstractJettyMojo.startJetty(AbstractJettyMojo.java:371)
+	at org.mortbay.jetty.plugin.AbstractJettyMojo.execute(AbstractJettyMojo.java:307)
+	at org.mortbay.jetty.plugin.AbstractJettyRunMojo.execute(AbstractJettyRunMojo.java:203)
+	at org.mortbay.jetty.plugin.Jetty6RunMojo.execute(Jetty6RunMojo.java:184)
+	at org.apache.maven.plugin.DefaultBuildPluginManager.executeMojo(DefaultBuildPluginManager.java:106)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:208)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:153)
+	at org.apache.maven.lifecycle.internal.MojoExecutor.execute(MojoExecutor.java:145)
+	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:84)
+	at org.apache.maven.lifecycle.internal.LifecycleModuleBuilder.buildProject(LifecycleModuleBuilder.java:59)
+	at org.apache.maven.lifecycle.internal.LifecycleStarter.singleThreadedBuild(LifecycleStarter.java:183)
+	at org.apache.maven.lifecycle.internal.LifecycleStarter.execute(LifecycleStarter.java:161)
+	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:318)
+	at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:153)
+	at org.apache.maven.cli.MavenCli.execute(MavenCli.java:555)
+	at org.apache.maven.cli.MavenCli.doMain(MavenCli.java:214)
+	at org.apache.maven.cli.MavenCli.main(MavenCli.java:158)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:39)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launchEnhanced(Launcher.java:290)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.launch(Launcher.java:230)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.mainWithExitCode(Launcher.java:414)
+	at org.codehaus.plexus.classworlds.launcher.Launcher.main(Launcher.java:357)
+[INFO] Started SelectChannelConnector@0.0.0.0:8080
+[INFO] Started Jetty Server
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:186) - Connection request: [route: {}->http://localhost:8081][total kept alive: 0; route allocated: 0 of 100; total allocated: 0 of 200]
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:220) - Connection leased: [id: 0][route: {}->http://localhost:8081][total kept alive: 0; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (DefaultClientConnectionOperator.java:177) - Connecting to localhost:8081
+DEBUG [btpool0-0] (RequestAddCookies.java:132) - CookieSpec selected: best-match
+DEBUG [btpool0-0] (RequestAuthCache.java:78) - Auth cache not set in the context
+DEBUG [btpool0-0] (RequestTargetAuthentication.java:78) - Target auth state: UNCHALLENGED
+DEBUG [btpool0-0] (RequestProxyAuthentication.java:87) - Proxy auth state: UNCHALLENGED
+DEBUG [btpool0-0] (DefaultRequestDirector.java:713) - Attempt 1 to execute request
+DEBUG [btpool0-0] (DefaultClientConnection.java:269) - Sending request: GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (Wire.java:63) - >> "GET /service/logger/plan HTTP/1.1[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Host: localhost:8081[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Connection: Keep-Alive[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "User-Agent: Apache-HttpClient/4.2.5 (java 1.5)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:273) - >> GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Host: localhost:8081
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Connection: Keep-Alive
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> User-Agent: Apache-HttpClient/4.2.5 (java 1.5)
+DEBUG [btpool0-2] (Demo.java:31) - About to close previous plan if exists
+Buffer size: 24576
+155663
+DEBUG [btpool0-2] (CachoRequester.java:34) - about to register progress:0
+DEBUG [btpool0-2] (DirectCachoStreamer.java:39) - [0,2097151] (2097152) - Downloading and streaming...
+DEBUG [btpool0-2] (DefaultMovieRetrievalPlanInterpreter.java:53) - share dir: demo/cachos
+DEBUG [btpool0-2] (BackgroundCachoStreamer.java:46) - [2097152, 2097151] (2097152) - Downloading... 
+DEBUG [btpool0-2] (DefaultMovieRetrievalPlanInterpreter.java:53) - share dir: demo/cachos
+DEBUG [btpool0-2] (BackgroundCachoStreamer.java:46) - [4194304, 2097151] (2097152) - Downloading... 
+DEBUG [btpool0-2] (DefaultMovieRetrievalPlanInterpreter.java:53) - share dir: demo/cachos
+DEBUG [btpool0-2] (BackgroundCachoStreamer.java:46) - [6291456, 2097151] (2097152) - Downloading... 
+DEBUG [btpool0-2] (DefaultMovieRetrievalPlanInterpreter.java:53) - share dir: demo/cachos
+DEBUG [btpool0-2] (BackgroundCachoStreamer.java:46) - [8388608, 2097151] (2097152) - Downloading... 
+DEBUG [btpool0-2] (DefaultMovieRetrievalPlanInterpreter.java:53) - share dir: demo/cachos
+DEBUG [btpool0-2] (BackgroundCachoStreamer.java:46) - [10485760, 2097151] (2097152) - Downloading... 
+DEBUG [btpool0-0] (Wire.java:63) - << "HTTP/1.1 200 OK[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Content-Type: application/json[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Transfer-Encoding: chunked[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Server: Jetty(6.1.26)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:254) - Receiving response: HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:257) - << HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Content-Type: application/json
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Transfer-Encoding: chunked
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Server: Jetty(6.1.26)
+DEBUG [btpool0-0] (DefaultRequestDirector.java:543) - Connection can be kept alive indefinitely
+DEBUG [btpool0-0] (Wire.java:63) - << "62E[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:77) - << "{"id":1,"pushers":[{"clientId":"1","ip":"1.1.1.1","port":"9876","byteCurrent":50,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":0},{"clientId":"2","ip":"2.1.1.1","port":"9876","byteCurrent":100,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":1},{"clientId":"3","ip":"3.1.1.1","port":"9876","byteCurrent":150,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":2},{"clientId":"4","ip":"4.1.1.1","port":"9876","byteCurrent":200,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":3},{"clientId":"5","ip":"5.1.1.1","port":"9876","byteCurrent":250,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":4},{"clientId":"6","ip":"6.1.1.1","port":"9876","byteCurrent":300,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":5},{"clientId":"7","ip":"7.1.1.1","port":"9876","byteCurrent":350,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":6},{"clientId":"8","ip":"8.1.1.1","port":"9876","byteCurrent":400,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":7},{"clientId":"9","ip":"9.1.1.1","port":"9876","byteCurrent":450,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":8},{"clientId":"10","ip":"10.1.1.1","port":"9876","byteCurrent":500,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":9},{"clientId":"11","ip":"11.1.1.1","port":"9876","byteCurrent":550,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":9},{"clientId":"12","ip":"12.1.1.1","port":"9876","byteCurrent":600,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":10}],"puller":{"clientId":"1","ip":"9.8.7.6","port":"0000","byteCurrent":500,"byteFrom":0,"byteTo":99999,"bandWidth":0,"progress":0}}"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "0[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:274) - Connection [id: 0][route: {}->http://localhost:8081] can be kept alive indefinitely
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:281) - Connection released: [id: 0][route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+localhost
+localhost
+localhost
+localhost
+localhost
+localhost
+DEBUG [New I/O worker #2] (CachoClientHandler.java:21) - Cacho org.test.streaming.CachoRequest@3ab6a5fb[movieId=<null>,fileName=Game.Of.Thrones.S02E07.A.Man.Without.Honor.HDTV.x264-ASAP.mp4,cacho=org.test.streaming.MovieCacho@5148bd9e[firstByteIndex=0,length=2097152],direction=PULL] requested.
+DEBUG [New I/O worker #4] (CachoClientHandler.java:21) - Cacho org.test.streaming.CachoRequest@41f2e41d[movieId=<null>,fileName=Game.Of.Thrones.S02E07.A.Man.Without.Honor.HDTV.x264-ASAP.mp4,cacho=org.test.streaming.MovieCacho@7e98f9c2[firstByteIndex=8388608,length=2097152],direction=PULL] requested.
+DEBUG [New I/O worker #3] (CachoClientHandler.java:21) - Cacho org.test.streaming.CachoRequest@df5cbd6[movieId=<null>,fileName=Game.Of.Thrones.S02E07.A.Man.Without.Honor.HDTV.x264-ASAP.mp4,cacho=org.test.streaming.MovieCacho@35087359[firstByteIndex=4194304,length=2097152],direction=PULL] requested.
+DEBUG [New I/O worker #5] (CachoClientHandler.java:21) - Cacho org.test.streaming.CachoRequest@1b4d774f[movieId=<null>,fileName=Game.Of.Thrones.S02E07.A.Man.Without.Honor.HDTV.x264-ASAP.mp4,cacho=org.test.streaming.MovieCacho@3dccf342[firstByteIndex=6291456,length=2097152],direction=PULL] requested.
+DEBUG [New I/O worker #12] (CachoClientHandler.java:21) - Cacho org.test.streaming.CachoRequest@2d4b1fda[movieId=<null>,fileName=Game.Of.Thrones.S02E07.A.Man.Without.Honor.HDTV.x264-ASAP.mp4,cacho=org.test.streaming.MovieCacho@4f6c14e7[firstByteIndex=10485760,length=2097152],direction=PULL] requested.
+DEBUG [New I/O worker #1] (CachoClientHandler.java:21) - Cacho org.test.streaming.CachoRequest@41955c3[movieId=<null>,fileName=Game.Of.Thrones.S02E07.A.Man.Without.Honor.HDTV.x264-ASAP.mp4,cacho=org.test.streaming.MovieCacho@6d35707c[firstByteIndex=2097152,length=2097152],direction=PULL] requested.
+DEBUG [New I/O worker #3] (CachoClientHandler.java:29) - Channel closed.
+DEBUG [Thread-11] (BackgroundCachoStreamer.java:195) - [4194304,6291455] - Background Cacho streamer closing... downloaded 0 bytes.
+0--------------0%, 454671 ms to complete, speed: 4605.697151424288 Bps
+2097152--------1%, 40128 ms to complete, speed: 51482.7018121911 Bps
+4194304--------0%, - ms to complete, speed: 0.0 Bps
+6291456--------0%, - ms to complete, speed: 0.0 Bps
+8388608--------0%, - ms to complete, speed: 0.0 Bps
+10485760-------1%, 42838 ms to complete, speed: 48225.30864197531 Bps
+Total speed: 104313.7076055907 Bps
+-------------------------------------------
+32 not started yet.
+-------------------------------------------
+-------------------------------------------
+0--------------1%, 45813 ms to complete, speed: 45093.795093795095 Bps
+2097152--------1%, 40128 ms to complete, speed: 51482.7018121911 Bps
+4194304--------0%, - ms to complete, speed: 0.0 Bps
+6291456--------0%, 190485 ms to complete, speed: 10966.532797858099 Bps
+8388608--------1%, 48788 ms to complete, speed: 42344.17344173442 Bps
+10485760-------1%, 42838 ms to complete, speed: 48225.30864197531 Bps
+Total speed: 198112.51178755402 Bps
+-------------------------------------------
+32 not started yet.
+-------------------------------------------
+-------------------------------------------
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:186) - Connection request: [route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:220) - Connection leased: [id: 0][route: {}->http://localhost:8081][total kept alive: 0; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (DefaultRequestDirector.java:465) - Stale connection check
+DEBUG [btpool0-0] (RequestAddCookies.java:132) - CookieSpec selected: best-match
+DEBUG [btpool0-0] (RequestAuthCache.java:78) - Auth cache not set in the context
+DEBUG [btpool0-0] (RequestTargetAuthentication.java:78) - Target auth state: UNCHALLENGED
+DEBUG [btpool0-0] (RequestProxyAuthentication.java:87) - Proxy auth state: UNCHALLENGED
+DEBUG [btpool0-0] (DefaultRequestDirector.java:713) - Attempt 1 to execute request
+DEBUG [btpool0-0] (DefaultClientConnection.java:269) - Sending request: GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (Wire.java:63) - >> "GET /service/logger/plan HTTP/1.1[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Host: localhost:8081[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Connection: Keep-Alive[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "User-Agent: Apache-HttpClient/4.2.5 (java 1.5)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:273) - >> GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Host: localhost:8081
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Connection: Keep-Alive
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> User-Agent: Apache-HttpClient/4.2.5 (java 1.5)
+DEBUG [btpool0-0] (Wire.java:63) - << "HTTP/1.1 200 OK[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Content-Type: application/json[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Transfer-Encoding: chunked[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Server: Jetty(6.1.26)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:254) - Receiving response: HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:257) - << HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Content-Type: application/json
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Transfer-Encoding: chunked
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Server: Jetty(6.1.26)
+DEBUG [btpool0-0] (DefaultRequestDirector.java:543) - Connection can be kept alive indefinitely
+DEBUG [btpool0-0] (Wire.java:63) - << "640[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:77) - << "{"id":1,"pushers":[{"clientId":"1","ip":"1.1.1.1","port":"9876","byteCurrent":650,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":11},{"clientId":"2","ip":"2.1.1.1","port":"9876","byteCurrent":700,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":12},{"clientId":"3","ip":"3.1.1.1","port":"9876","byteCurrent":750,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":13},{"clientId":"4","ip":"4.1.1.1","port":"9876","byteCurrent":800,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":14},{"clientId":"5","ip":"5.1.1.1","port":"9876","byteCurrent":850,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":15},{"clientId":"6","ip":"6.1.1.1","port":"9876","byteCurrent":900,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":16},{"clientId":"7","ip":"7.1.1.1","port":"9876","byteCurrent":950,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":17},{"clientId":"8","ip":"8.1.1.1","port":"9876","byteCurrent":1000,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":18},{"clientId":"9","ip":"9.1.1.1","port":"9876","byteCurrent":1050,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":18},{"clientId":"10","ip":"10.1.1.1","port":"9876","byteCurrent":1100,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":19},{"clientId":"11","ip":"11.1.1.1","port":"9876","byteCurrent":1150,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":20},{"clientId":"12","ip":"12.1.1.1","port":"9876","byteCurrent":1200,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":21}],"puller":{"clientId":"1","ip":"9.8.7.6","port":"0000","byteCurrent":1000,"byteFrom":0,"byteTo":99999,"bandWidth":0,"progress":1}}"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "0[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:274) - Connection [id: 0][route: {}->http://localhost:8081] can be kept alive indefinitely
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:281) - Connection released: [id: 0][route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+0--------------2%, 55537 ms to complete, speed: 36635.40445486518 Bps
+2097152--------2%, 52998 ms to complete, speed: 38390.663390663394 Bps
+4194304--------0%, - ms to complete, speed: 0.0 Bps
+6291456--------2%, 58272 ms to complete, speed: 34916.20111731844 Bps
+8388608--------2%, 56937 ms to complete, speed: 35734.7055460263 Bps
+10485760-------2%, 54300 ms to complete, speed: 37470.02398081535 Bps
+Total speed: 183146.99848968865 Bps
+-------------------------------------------
+32 not started yet.
+-------------------------------------------
+-------------------------------------------
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:186) - Connection request: [route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:220) - Connection leased: [id: 0][route: {}->http://localhost:8081][total kept alive: 0; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (DefaultRequestDirector.java:465) - Stale connection check
+DEBUG [btpool0-0] (RequestAddCookies.java:132) - CookieSpec selected: best-match
+DEBUG [btpool0-0] (RequestAuthCache.java:78) - Auth cache not set in the context
+DEBUG [btpool0-0] (RequestTargetAuthentication.java:78) - Target auth state: UNCHALLENGED
+DEBUG [btpool0-0] (RequestProxyAuthentication.java:87) - Proxy auth state: UNCHALLENGED
+DEBUG [btpool0-0] (DefaultRequestDirector.java:713) - Attempt 1 to execute request
+DEBUG [btpool0-0] (DefaultClientConnection.java:269) - Sending request: GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (Wire.java:63) - >> "GET /service/logger/plan HTTP/1.1[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Host: localhost:8081[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Connection: Keep-Alive[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "User-Agent: Apache-HttpClient/4.2.5 (java 1.5)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:273) - >> GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Host: localhost:8081
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Connection: Keep-Alive
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> User-Agent: Apache-HttpClient/4.2.5 (java 1.5)
+DEBUG [btpool0-0] (Wire.java:63) - << "HTTP/1.1 200 OK[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Content-Type: application/json[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Transfer-Encoding: chunked[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Server: Jetty(6.1.26)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:254) - Receiving response: HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:257) - << HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Content-Type: application/json
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Transfer-Encoding: chunked
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Server: Jetty(6.1.26)
+DEBUG [btpool0-0] (DefaultRequestDirector.java:543) - Connection can be kept alive indefinitely
+DEBUG [btpool0-0] (Wire.java:63) - << "647[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:77) - << "{"id":1,"pushers":[{"clientId":"1","ip":"1.1.1.1","port":"9876","byteCurrent":1250,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":22},{"clientId":"2","ip":"2.1.1.1","port":"9876","byteCurrent":1300,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":23},{"clientId":"3","ip":"3.1.1.1","port":"9876","byteCurrent":1350,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":24},{"clientId":"4","ip":"4.1.1.1","port":"9876","byteCurrent":1400,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":25},{"clientId":"5","ip":"5.1.1.1","port":"9876","byteCurrent":1450,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":26},{"clientId":"6","ip":"6.1.1.1","port":"9876","byteCurrent":1500,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":27},{"clientId":"7","ip":"7.1.1.1","port":"9876","byteCurrent":1550,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":27},{"clientId":"8","ip":"8.1.1.1","port":"9876","byteCurrent":1600,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":28},{"clientId":"9","ip":"9.1.1.1","port":"9876","byteCurrent":1650,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":29},{"clientId":"10","ip":"10.1.1.1","port":"9876","byteCurrent":1700,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":30},{"clientId":"11","ip":"11.1.1.1","port":"9876","byteCurrent":1750,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":31},{"clientId":"12","ip":"12.1.1.1","port":"9876","byteCurrent":1800,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":32}],"puller":{"clientId":"1","ip":"9.8.7.6","port":"0000","byteCurrent":1500,"byteFrom":0,"byteTo":99999,"bandWidth":0,"progress":1}}"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "0[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:274) - Connection [id: 0][route: {}->http://localhost:8081] can be kept alive indefinitely
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:281) - Connection released: [id: 0][route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+0--------------5%, 59196 ms to complete, speed: 33315.565031982944 Bps
+2097152--------5%, 57287 ms to complete, speed: 34425.77802258331 Bps
+4194304--------0%, - ms to complete, speed: 0.0 Bps
+6291456--------5%, 59921 ms to complete, speed: 32912.05897840969 Bps
+8388608--------5%, 58486 ms to complete, speed: 33719.98920960345 Bps
+10485760-------5%, 57902 ms to complete, speed: 34059.94550408719 Bps
+Total speed: 168433.3367466666 Bps
+-------------------------------------------
+32 not started yet.
+-------------------------------------------
+-------------------------------------------
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:186) - Connection request: [route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:220) - Connection leased: [id: 0][route: {}->http://localhost:8081][total kept alive: 0; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (DefaultRequestDirector.java:465) - Stale connection check
+DEBUG [btpool0-0] (RequestAddCookies.java:132) - CookieSpec selected: best-match
+DEBUG [btpool0-0] (RequestAuthCache.java:78) - Auth cache not set in the context
+DEBUG [btpool0-0] (RequestTargetAuthentication.java:78) - Target auth state: UNCHALLENGED
+DEBUG [btpool0-0] (RequestProxyAuthentication.java:87) - Proxy auth state: UNCHALLENGED
+DEBUG [btpool0-0] (DefaultRequestDirector.java:713) - Attempt 1 to execute request
+DEBUG [btpool0-0] (DefaultClientConnection.java:269) - Sending request: GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (Wire.java:63) - >> "GET /service/logger/plan HTTP/1.1[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Host: localhost:8081[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Connection: Keep-Alive[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "User-Agent: Apache-HttpClient/4.2.5 (java 1.5)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:273) - >> GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Host: localhost:8081
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Connection: Keep-Alive
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> User-Agent: Apache-HttpClient/4.2.5 (java 1.5)
+DEBUG [btpool0-0] (Wire.java:63) - << "HTTP/1.1 200 OK[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Content-Type: application/json[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Transfer-Encoding: chunked[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Server: Jetty(6.1.26)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:254) - Receiving response: HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:257) - << HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Content-Type: application/json
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Transfer-Encoding: chunked
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Server: Jetty(6.1.26)
+DEBUG [btpool0-0] (DefaultRequestDirector.java:543) - Connection can be kept alive indefinitely
+DEBUG [btpool0-0] (Wire.java:63) - << "647[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:77) - << "{"id":1,"pushers":[{"clientId":"1","ip":"1.1.1.1","port":"9876","byteCurrent":1850,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":33},{"clientId":"2","ip":"2.1.1.1","port":"9876","byteCurrent":1900,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":34},{"clientId":"3","ip":"3.1.1.1","port":"9876","byteCurrent":1950,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":35},{"clientId":"4","ip":"4.1.1.1","port":"9876","byteCurrent":2000,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":36},{"clientId":"5","ip":"5.1.1.1","port":"9876","byteCurrent":2050,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":36},{"clientId":"6","ip":"6.1.1.1","port":"9876","byteCurrent":2100,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":37},{"clientId":"7","ip":"7.1.1.1","port":"9876","byteCurrent":2150,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":38},{"clientId":"8","ip":"8.1.1.1","port":"9876","byteCurrent":2200,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":39},{"clientId":"9","ip":"9.1.1.1","port":"9876","byteCurrent":2250,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":40},{"clientId":"10","ip":"10.1.1.1","port":"9876","byteCurrent":2300,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":41},{"clientId":"11","ip":"11.1.1.1","port":"9876","byteCurrent":2350,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":42},{"clientId":"12","ip":"12.1.1.1","port":"9876","byteCurrent":2400,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":43}],"puller":{"clientId":"1","ip":"9.8.7.6","port":"0000","byteCurrent":2000,"byteFrom":0,"byteTo":99999,"bandWidth":0,"progress":2}}"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "0[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:274) - Connection [id: 0][route: {}->http://localhost:8081] can be kept alive indefinitely
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:281) - Connection released: [id: 0][route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+0--------------8%, 58083 ms to complete, speed: 32877.43293003682 Bps
+2097152--------8%, 57289 ms to complete, speed: 33333.333333333336 Bps
+4194304--------0%, - ms to complete, speed: 0.0 Bps
+6291456--------8%, 58949 ms to complete, speed: 32394.609536973046 Bps
+8388608--------8%, 58532 ms to complete, speed: 32625.717765790847 Bps
+10485760-------8%, 57707 ms to complete, speed: 33092.1284857042 Bps
+Total speed: 164323.22205183824 Bps
+-------------------------------------------
+32 not started yet.
+-------------------------------------------
+-------------------------------------------
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:186) - Connection request: [route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:220) - Connection leased: [id: 0][route: {}->http://localhost:8081][total kept alive: 0; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (DefaultRequestDirector.java:465) - Stale connection check
+DEBUG [btpool0-0] (RequestAddCookies.java:132) - CookieSpec selected: best-match
+DEBUG [btpool0-0] (RequestAuthCache.java:78) - Auth cache not set in the context
+DEBUG [btpool0-0] (RequestTargetAuthentication.java:78) - Target auth state: UNCHALLENGED
+DEBUG [btpool0-0] (RequestProxyAuthentication.java:87) - Proxy auth state: UNCHALLENGED
+DEBUG [btpool0-0] (DefaultRequestDirector.java:713) - Attempt 1 to execute request
+DEBUG [btpool0-0] (DefaultClientConnection.java:269) - Sending request: GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (Wire.java:63) - >> "GET /service/logger/plan HTTP/1.1[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Host: localhost:8081[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Connection: Keep-Alive[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "User-Agent: Apache-HttpClient/4.2.5 (java 1.5)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:273) - >> GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Host: localhost:8081
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Connection: Keep-Alive
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> User-Agent: Apache-HttpClient/4.2.5 (java 1.5)
+DEBUG [btpool0-0] (Wire.java:63) - << "HTTP/1.1 200 OK[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Content-Type: application/json[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Transfer-Encoding: chunked[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Server: Jetty(6.1.26)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:254) - Receiving response: HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:257) - << HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Content-Type: application/json
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Transfer-Encoding: chunked
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Server: Jetty(6.1.26)
+DEBUG [btpool0-0] (DefaultRequestDirector.java:543) - Connection can be kept alive indefinitely
+DEBUG [btpool0-0] (Wire.java:63) - << "647[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:77) - << "{"id":1,"pushers":[{"clientId":"1","ip":"1.1.1.1","port":"9876","byteCurrent":2450,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":44},{"clientId":"2","ip":"2.1.1.1","port":"9876","byteCurrent":2500,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":45},{"clientId":"3","ip":"3.1.1.1","port":"9876","byteCurrent":2550,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":45},{"clientId":"4","ip":"4.1.1.1","port":"9876","byteCurrent":2600,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":46},{"clientId":"5","ip":"5.1.1.1","port":"9876","byteCurrent":2650,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":47},{"clientId":"6","ip":"6.1.1.1","port":"9876","byteCurrent":2700,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":48},{"clientId":"7","ip":"7.1.1.1","port":"9876","byteCurrent":2750,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":49},{"clientId":"8","ip":"8.1.1.1","port":"9876","byteCurrent":2800,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":50},{"clientId":"9","ip":"9.1.1.1","port":"9876","byteCurrent":2850,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":51},{"clientId":"10","ip":"10.1.1.1","port":"9876","byteCurrent":2900,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":52},{"clientId":"11","ip":"11.1.1.1","port":"9876","byteCurrent":2950,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":53},{"clientId":"12","ip":"12.1.1.1","port":"9876","byteCurrent":3000,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":54}],"puller":{"clientId":"1","ip":"9.8.7.6","port":"0000","byteCurrent":2500,"byteFrom":0,"byteTo":99999,"bandWidth":0,"progress":2}}"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "0[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:274) - Connection [id: 0][route: {}->http://localhost:8081] can be kept alive indefinitely
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:281) - Connection released: [id: 0][route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+0--------------11%, 57246 ms to complete, speed: 32266.39132679401 Bps
+2097152--------11%, 56345 ms to complete, speed: 32782.585890375034 Bps
+4194304--------0%, - ms to complete, speed: 0.0 Bps
+6291456--------11%, 57549 ms to complete, speed: 32096.546411606112 Bps
+8388608--------11%, 56914 ms to complete, speed: 32454.887706088535 Bps
+10485760-------11%, 56641 ms to complete, speed: 32611.531437516303 Bps
+Total speed: 162211.94277238 Bps
+-------------------------------------------
+32 not started yet.
+-------------------------------------------
+-------------------------------------------
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:186) - Connection request: [route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:220) - Connection leased: [id: 0][route: {}->http://localhost:8081][total kept alive: 0; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (DefaultRequestDirector.java:465) - Stale connection check
+DEBUG [btpool0-0] (RequestAddCookies.java:132) - CookieSpec selected: best-match
+DEBUG [btpool0-0] (RequestAuthCache.java:78) - Auth cache not set in the context
+DEBUG [btpool0-0] (RequestTargetAuthentication.java:78) - Target auth state: UNCHALLENGED
+DEBUG [btpool0-0] (RequestProxyAuthentication.java:87) - Proxy auth state: UNCHALLENGED
+DEBUG [btpool0-0] (DefaultRequestDirector.java:713) - Attempt 1 to execute request
+DEBUG [btpool0-0] (DefaultClientConnection.java:269) - Sending request: GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (Wire.java:63) - >> "GET /service/logger/plan HTTP/1.1[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Host: localhost:8081[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Connection: Keep-Alive[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "User-Agent: Apache-HttpClient/4.2.5 (java 1.5)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:273) - >> GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Host: localhost:8081
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Connection: Keep-Alive
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> User-Agent: Apache-HttpClient/4.2.5 (java 1.5)
+DEBUG [btpool0-0] (Wire.java:63) - << "HTTP/1.1 200 OK[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Content-Type: application/json[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Transfer-Encoding: chunked[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Server: Jetty(6.1.26)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:254) - Receiving response: HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:257) - << HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Content-Type: application/json
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Transfer-Encoding: chunked
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Server: Jetty(6.1.26)
+DEBUG [btpool0-0] (DefaultRequestDirector.java:543) - Connection can be kept alive indefinitely
+DEBUG [btpool0-0] (Wire.java:63) - << "647[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:77) - << "{"id":1,"pushers":[{"clientId":"1","ip":"1.1.1.1","port":"9876","byteCurrent":3050,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":54},{"clientId":"2","ip":"2.1.1.1","port":"9876","byteCurrent":3100,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":55},{"clientId":"3","ip":"3.1.1.1","port":"9876","byteCurrent":3150,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":56},{"clientId":"4","ip":"4.1.1.1","port":"9876","byteCurrent":3200,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":57},{"clientId":"5","ip":"5.1.1.1","port":"9876","byteCurrent":3250,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":58},{"clientId":"6","ip":"6.1.1.1","port":"9876","byteCurrent":3300,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":59},{"clientId":"7","ip":"7.1.1.1","port":"9876","byteCurrent":3350,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":60},{"clientId":"8","ip":"8.1.1.1","port":"9876","byteCurrent":3400,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":61},{"clientId":"9","ip":"9.1.1.1","port":"9876","byteCurrent":3450,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":62},{"clientId":"10","ip":"10.1.1.1","port":"9876","byteCurrent":3500,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":63},{"clientId":"11","ip":"11.1.1.1","port":"9876","byteCurrent":3550,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":63},{"clientId":"12","ip":"12.1.1.1","port":"9876","byteCurrent":3600,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":64}],"puller":{"clientId":"1","ip":"9.8.7.6","port":"0000","byteCurrent":3000,"byteFrom":0,"byteTo":99999,"bandWidth":0,"progress":3}}"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "0[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:274) - Connection [id: 0][route: {}->http://localhost:8081] can be kept alive indefinitely
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:281) - Connection released: [id: 0][route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+0--------------14%, 55732 ms to complete, speed: 32021.723537247668 Bps
+2097152--------14%, 55121 ms to complete, speed: 32376.709490261088 Bps
+4194304--------0%, - ms to complete, speed: 0.0 Bps
+6291456--------14%, 55989 ms to complete, speed: 31874.74500203998 Bps
+8388608--------14%, 55515 ms to complete, speed: 32146.898467235882 Bps
+10485760-------14%, 55264 ms to complete, speed: 32293.066032861425 Bps
+Total speed: 160713.14252964605 Bps
+-------------------------------------------
+32 not started yet.
+-------------------------------------------
+-------------------------------------------
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:186) - Connection request: [route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:220) - Connection leased: [id: 0][route: {}->http://localhost:8081][total kept alive: 0; route allocated: 1 of 100; total allocated: 1 of 200]
+DEBUG [btpool0-0] (DefaultRequestDirector.java:465) - Stale connection check
+DEBUG [btpool0-0] (RequestAddCookies.java:132) - CookieSpec selected: best-match
+DEBUG [btpool0-0] (RequestAuthCache.java:78) - Auth cache not set in the context
+DEBUG [btpool0-0] (RequestTargetAuthentication.java:78) - Target auth state: UNCHALLENGED
+DEBUG [btpool0-0] (RequestProxyAuthentication.java:87) - Proxy auth state: UNCHALLENGED
+DEBUG [btpool0-0] (DefaultRequestDirector.java:713) - Attempt 1 to execute request
+DEBUG [btpool0-0] (DefaultClientConnection.java:269) - Sending request: GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (Wire.java:63) - >> "GET /service/logger/plan HTTP/1.1[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Host: localhost:8081[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "Connection: Keep-Alive[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "User-Agent: Apache-HttpClient/4.2.5 (java 1.5)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - >> "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:273) - >> GET /service/logger/plan HTTP/1.1
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Host: localhost:8081
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> Connection: Keep-Alive
+DEBUG [btpool0-0] (DefaultClientConnection.java:276) - >> User-Agent: Apache-HttpClient/4.2.5 (java 1.5)
+DEBUG [btpool0-0] (Wire.java:63) - << "HTTP/1.1 200 OK[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Content-Type: application/json[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Transfer-Encoding: chunked[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "Server: Jetty(6.1.26)[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (DefaultClientConnection.java:254) - Receiving response: HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:257) - << HTTP/1.1 200 OK
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Content-Type: application/json
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Transfer-Encoding: chunked
+DEBUG [btpool0-0] (DefaultClientConnection.java:260) - << Server: Jetty(6.1.26)
+DEBUG [btpool0-0] (DefaultRequestDirector.java:543) - Connection can be kept alive indefinitely
+DEBUG [btpool0-0] (Wire.java:63) - << "647[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:77) - << "{"id":1,"pushers":[{"clientId":"1","ip":"1.1.1.1","port":"9876","byteCurrent":3650,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":65},{"clientId":"2","ip":"2.1.1.1","port":"9876","byteCurrent":3700,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":66},{"clientId":"3","ip":"3.1.1.1","port":"9876","byteCurrent":3750,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":67},{"clientId":"4","ip":"4.1.1.1","port":"9876","byteCurrent":3800,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":68},{"clientId":"5","ip":"5.1.1.1","port":"9876","byteCurrent":3850,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":69},{"clientId":"6","ip":"6.1.1.1","port":"9876","byteCurrent":3900,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":70},{"clientId":"7","ip":"7.1.1.1","port":"9876","byteCurrent":3950,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":71},{"clientId":"8","ip":"8.1.1.1","port":"9876","byteCurrent":4000,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":72},{"clientId":"9","ip":"9.1.1.1","port":"9876","byteCurrent":4050,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":72},{"clientId":"10","ip":"10.1.1.1","port":"9876","byteCurrent":4100,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":73},{"clientId":"11","ip":"11.1.1.1","port":"9876","byteCurrent":4150,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":74},{"clientId":"12","ip":"12.1.1.1","port":"9876","byteCurrent":4200,"byteFrom":0,"byteTo":5555,"bandWidth":15,"progress":75}],"puller":{"clientId":"1","ip":"9.8.7.6","port":"0000","byteCurrent":3500,"byteFrom":0,"byteTo":99999,"bandWidth":0,"progress":3}}"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "0[\r][\n]"
+DEBUG [btpool0-0] (Wire.java:63) - << "[\r][\n]"
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:274) - Connection [id: 0][route: {}->http://localhost:8081] can be kept alive indefinitely
+DEBUG [btpool0-0] (PoolingClientConnectionManager.java:281) - Connection released: [id: 0][route: {}->http://localhost:8081][total kept alive: 1; route allocated: 1 of 100; total allocated: 1 of 200]
+0--------------17%, 53960 ms to complete, speed: 31914.893617021276 Bps
+2097152--------17%, 53607 ms to complete, speed: 32125.417630429194 Bps
+4194304--------0%, - ms to complete, speed: 0.0 Bps
+6291456--------17%, 54149 ms to complete, speed: 31803.918242727505 Bps
+8388608--------17%, 53758 ms to complete, speed: 32034.853921066122 Bps
+10485760-------17%, 53382 ms to complete, speed: 32260.83964211975 Bps
+Total speed: 160139.92305336386 Bps
+-------------------------------------------
+32 not started yet.
+-------------------------------------------
+-------------------------------------------

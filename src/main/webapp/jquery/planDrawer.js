@@ -1,12 +1,17 @@
 $(function() {
 
-	drawPlan = function() {
-		
+	var retrievalPlanId = null;
+	
+	drawPlan = function(planId) {
+		retrievalPlanId = planId;
+		if(retrievalPlanId == null) {
+			retrievalPlanId = "dummyPlanId";
+		}
 		$("#pullerBox").empty();
 		$("#pushersBox").empty();
 		$.ajax({
 			dataType : "json",
-			url : "progress",
+			url : "progress?planId="+planId,
 			// data: data,
 			success : function(data) {
 				drawPuller(data.puller);
@@ -15,10 +20,10 @@ $(function() {
 		});
 	};
 
-	refreshPlan = function() {
+	refreshPlan = function(planId) {
 		$.ajax({
 			dataType : "json",
-			url : "progress",
+			url : "progress?planId="+planId,
 			// data: data,
 			success : function(data) {
 				refreshPuller(data.puller);
@@ -28,7 +33,7 @@ $(function() {
 	};
 	
 	window.setInterval(function() {
-		refreshPlan();
+		refreshPlan(retrievalPlanId);
 	}, 2000);
 
 	drawPuller = function(puller) {

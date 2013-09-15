@@ -24,6 +24,12 @@ public class Progress extends HttpServlet {
 
 		Conf conf = (Conf)this.getServletContext().getAttribute("conf");
 		String url = "http://"+conf.getStatusLoggerHost()+conf.getStatusLoggerServiceUri()+conf.getStatusLoggerServicePlanSuffix();
+
+//		Object planId = req.getParameter("planId");
+//		if(planId != null) {
+//			url += "/"+planId.toString();
+//		}
+		
 		Response progressResponse = Request.Get(url).execute();
 		resp.setContentType("application/json");
 		String jsonProgress = new String(progressResponse.returnContent().asBytes());

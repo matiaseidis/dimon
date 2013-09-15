@@ -15,7 +15,6 @@ public class LastRetrievalPlanLocator {
 	
 	private static final LastRetrievalPlanLocator instance = new LastRetrievalPlanLocator();
 	private final List<CachoStreamer> streamers = new ArrayList<CachoStreamer>();
-//	private final List<Map<CachoRequest, ProgressReport>> progress = new ArrayList<Map<CachoRequest, ProgressReport>>();
 	
 	private final Map<CachoRequest, ProgressReport> progress = new HashMap<CachoRequest, ProgressReport>();
 	
@@ -53,14 +52,6 @@ public class LastRetrievalPlanLocator {
 	public String getPlanId() {
 		return "plan-id";
 	}
-
-//	public List<Map<CachoRequest, ProgressReport>> getProgress() {
-//		return progress;
-//	}
-//
-//	public void addProgress(Map<CachoRequest, ProgressReport> p) {
-//		this.getProgress().add(p);
-//	}
 
 	public Map<CachoRequest, ProgressReport> getProgress() {
 		return progress;

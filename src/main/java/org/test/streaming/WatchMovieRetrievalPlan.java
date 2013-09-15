@@ -32,4 +32,10 @@ public class WatchMovieRetrievalPlan implements MovieRetrievalPlan {
 	public void setVideoLenght(long videoLenght) {
 		this.videoLenght = videoLenght;
 	}
+	
+	@Override
+	public String getPlanId() {
+		return this.getVideoId();
+	}
+
 }

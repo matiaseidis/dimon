@@ -55,4 +55,9 @@ public class DummyMovieRetrievalPlan implements MovieRetrievalPlan {
 		return videoId;
 	}
 
+	@Override
+	public String getPlanId() {
+		return "dummyPlanId";
+	}
+
 }
