@@ -144,15 +144,8 @@ public class StatusHandler {
 	}
 
 	private String urlFor(String suffix) {
-		String preffix = "http://" + conf.getStatusLoggerHost() + conf.getStatusLoggerServiceUri();
-		String encodedSuffix = null;
-		try {
-			encodedSuffix = URLEncoder.encode(suffix, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			log.error("unable to encode url: "+suffix, e);
-			encodedSuffix = suffix;
-		}
-		return preffix + encodedSuffix;
+		String url = "http://" + conf.getStatusLoggerHost() + conf.getStatusLoggerServiceUri() + suffix;
+		return url;
 	}
 
 	private String status(String status) {
@@ -164,8 +157,17 @@ public class StatusHandler {
 				status, 
 				conf.getDaemonHost(),
 				conf.getDaemonPort(), 
-				conf.getUserId(), 
-				bandWidth);
+				this.encode(conf.getUserId()), 
+				this.encode(Long.toString(bandWidth)));
+	}
+
+	private String encode(String s) {
+		try {
+			return URLEncoder.encode(s, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			log.error("unable to encode: "+s, e);
+		}
+		return null;
 	}
 
 	private String activity(
@@ -181,9 +183,18 @@ public class StatusHandler {
 		int byteTo = request.getCacho().getLastByteIndex();
 		double bandWidth = progress.getBandWidth();
 
-		return String.format(conf.getStatusLoggerServiceReportActivitySuffix(), action, conf.getDaemonHost(),
-				conf.getDaemonPort(), planId, conf.getUserId(), byteCurrent,
-				byteFrom, byteTo, bandWidth);
+		return String.format(
+				conf.getStatusLoggerServiceReportActivitySuffix(), 
+				action, 
+				conf.getDaemonHost(),
+				conf.getDaemonPort(), 
+				planId, 
+				conf.getUserId(), 
+				byteCurrent,
+				byteFrom, 
+				byteTo, 
+				this.encode(Double.toString(bandWidth)) 
+				);
 	}
 
 	public static StatusHandler getInstance() {
