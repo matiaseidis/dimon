@@ -10,9 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.http.client.fluent.Request;
 import org.apache.http.client.fluent.Response;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class Progress extends HttpServlet {
 
+protected static final Log log = LogFactory.getLog(Progress.class);
 	/**
 	 * 
 	 */
@@ -25,10 +28,12 @@ public class Progress extends HttpServlet {
 		Conf conf = (Conf)this.getServletContext().getAttribute("conf");
 		String url = "http://"+conf.getStatusLoggerHost()+conf.getStatusLoggerServiceUri()+conf.getStatusLoggerServicePlanSuffix();
 
-//		Object planId = req.getParameter("planId");
-//		if(planId != null) {
-//			url += "/"+planId.toString();
-//		}
+		Object planId = req.getParameter("planId");
+		if(planId != null) {
+			url += "/"+planId.toString();
+		}
+		
+		log.debug("about to get status from status repo: "+url);
 		
 		Response progressResponse = Request.Get(url).execute();
 		resp.setContentType("application/json");

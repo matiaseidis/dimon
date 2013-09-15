@@ -4,9 +4,7 @@ $(function() {
 	
 	drawPlan = function(planId) {
 		retrievalPlanId = planId;
-		if(retrievalPlanId == null) {
-			retrievalPlanId = "dummyPlanId";
-		}
+		
 		$("#pullerBox").empty();
 		$("#pushersBox").empty();
 		$.ajax({

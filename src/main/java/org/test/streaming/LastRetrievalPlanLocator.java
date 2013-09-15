@@ -50,7 +50,7 @@ public class LastRetrievalPlanLocator {
 	}
 
 	public String getPlanId() {
-		return "plan-id";
+		return "dummyPlanId";
 	}
 
 	public Map<CachoRequest, ProgressReport> getProgress() {

@@ -1,0 +1,3 @@
+rm demo/temp/* && rm demo/cachos/* 
+rm $HOME/repo-prevayler/*
+

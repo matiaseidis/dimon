@@ -21,7 +21,7 @@ if(conf.isStatusReportEnabled()) {
 
 	<script type="text/javascript">
 		$(function() {
-			drawPlan(<%=request.getAttribute("planId")%>);		
+			drawPlan("dummyPlanId");		
 		});
 	</script>
 
