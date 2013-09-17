@@ -3,17 +3,19 @@ $(function() {
 	var retrievalPlanId = null;
 	
 	drawPlan = function(planId) {
-		retrievalPlanId = planId;
+//		retrievalPlanId = planId;
 		
 		$("#pullerBox").empty();
 		$("#pushersBox").empty();
 		$.ajax({
 			dataType : "json",
-			url : "progress?planId="+planId,
+//			url : "progress?planId="+planId,
+			url : "progress",
 			// data: data,
 			success : function(data) {
-				drawPuller(data.puller);
-				drawPushers(data.pushers);
+				console.log(data);
+//				drawPuller(data.puller);
+				drawPushers(data.pulls);
 			}
 		});
 	};
@@ -21,11 +23,13 @@ $(function() {
 	refreshPlan = function(planId) {
 		$.ajax({
 			dataType : "json",
-			url : "progress?planId="+planId,
+//			url : "progress?planId="+planId,
+			url : "progress",
 			// data: data,
 			success : function(data) {
-				refreshPuller(data.puller);
-				refreshPushers(data.pushers);
+				console.log(data);
+//				refreshPuller(data.puller);
+				refreshPushers(data.pulls);
 			}
 		});
 	};
