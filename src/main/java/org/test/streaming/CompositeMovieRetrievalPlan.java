@@ -2,6 +2,8 @@ package org.test.streaming;
 
 import java.util.List;
 
+import org.test.streaming.status.StatusHandler;
+
 import com.google.common.collect.Lists;
 
 public class CompositeMovieRetrievalPlan {
@@ -30,7 +32,12 @@ public class CompositeMovieRetrievalPlan {
 				currentPlan.getRequests().add(requests.get(d * maxParalReqs + i));
 			}
 		}
-
+		
+		for(MovieRetrievalPlan p : this.getPlans()) {
+			for(CachoRetrieval cr : p.getRequests()) {
+				LastRetrievalPlanLocator.getInstance().registerCacho(cr.getRequest());
+			}
+		}
 	}
 
 	public String getVideoId() {

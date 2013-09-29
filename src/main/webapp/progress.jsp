@@ -15,14 +15,13 @@ if(conf.isStatusReportEnabled()) {
 <h2>Plan: demo</h2>
 
 	<div id="outerBox">
-		<div id="pullerBox"></div>
 		<div id="pushersBox"></div>
 	</div>
 
 	<script type="text/javascript">
 		$(function() {
 			drawPlan(
-// 		"dummyPlanId"
+		"dummyPlanId"
 		);
 		});
 	</script>

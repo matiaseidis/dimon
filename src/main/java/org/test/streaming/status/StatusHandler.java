@@ -1,9 +1,7 @@
 package org.test.streaming.status;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -36,10 +34,11 @@ public class StatusHandler {
 				public void run() {
 					while (true) {
 
+						try {
 						int currentActivities = LastRetrievalPlanLocator
 								.getInstance().getProgress().size();
 
-						log.debug("about to total activities: "
+						log.debug("about to log total activities: "
 								+ currentActivities);
 						boolean iddle = currentActivities == 0;
 
@@ -48,6 +47,10 @@ public class StatusHandler {
 						} else {
 							logActivities(LastRetrievalPlanLocator
 									.getInstance().getProgress());
+						}
+						} catch(Exception e) {
+							e.printStackTrace();
+							log.error("ups...", e);
 						}
 
 						try {
@@ -68,30 +71,31 @@ public class StatusHandler {
 		StatusHandler.conf = conf;
 	}
 
-	private void logActivities(Map<CachoRequest, ProgressReport> activities) {
+	private void logActivities(List<CachoProgress> activities) {
 		
 		if(!StatusHandler.conf.isStatusReportEnabled()){
 			return;
 		}
 
 		Map<CachoRequest, ProgressReport> completed = new HashMap<CachoRequest, ProgressReport>();
-		for (Map.Entry<CachoRequest, ProgressReport> cachoProgress : activities
-				.entrySet()) {
+//		for (Map.Entry<CachoRequest, ProgressReport> cachoProgress : activities
+//				.entrySet()) {
+		for (CachoProgress cachoProgress : activities) {
 
 			log.debug("about to log progress perc. "
-					+ cachoProgress.getValue().getProgressPct());
-			if (cachoProgress.getValue().getProgressPct() < 100) {
+					+ cachoProgress.getProgressReport() == null ? "NULL" : cachoProgress.getProgressReport().getProgressPct());
+			if (cachoProgress.getProgressReport().getProgressPct() < 100) {
 				log(urlFor(activity(cachoProgress)));
 			} else {
-				completed.put(cachoProgress.getKey(), cachoProgress.getValue());
+				completed.put(cachoProgress.getCachoRequest(), cachoProgress.getProgressReport());
 			}
 		}
 		if (!completed.isEmpty()) {
 			log.debug("about to remove " + completed.size()
 					+ " cachos already completed");
 			for (CachoRequest cachoCompleted : completed.keySet()) {
-				LastRetrievalPlanLocator.getInstance().getProgress()
-						.remove(cachoCompleted);
+//				LastRetrievalPlanLocator.getInstance().getProgress()
+//						.remove(cachoCompleted);
 			}
 		}
 	}
@@ -161,11 +165,10 @@ public class StatusHandler {
 				Long.toString(bandWidth));
 	}
 
-	private String activity(
-			Map.Entry<CachoRequest, ProgressReport> cachoProgress) {
+	private String activity(CachoProgress cachoProgress) {
 
-		CachoRequest request = cachoProgress.getKey();
-		ProgressReport progress = cachoProgress.getValue();
+		CachoRequest request = cachoProgress.getCachoRequest();
+		ProgressReport progress = cachoProgress.getProgressReport();
 		String action = request.getDirection().name();
 		String planId = LastRetrievalPlanLocator.getInstance().getPlanId();
 		int byteCurrent = progress.getAmountOfReceivedBytes()

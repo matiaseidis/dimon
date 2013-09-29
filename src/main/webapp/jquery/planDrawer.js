@@ -3,18 +3,15 @@ $(function() {
 	var retrievalPlanId = null;
 	
 	drawPlan = function(planId) {
-//		retrievalPlanId = planId;
+		retrievalPlanId = planId;
 		
-		$("#pullerBox").empty();
 		$("#pushersBox").empty();
 		$.ajax({
 			dataType : "json",
-//			url : "progress?planId="+planId,
-			url : "progress",
-			// data: data,
+			url : "progress?planId="+planId,
+//			url : "progress",
 			success : function(data) {
-				console.log(data);
-//				drawPuller(data.puller);
+//				console.log(data);
 				drawPushers(data.pulls);
 			}
 		});
@@ -23,12 +20,10 @@ $(function() {
 	refreshPlan = function(planId) {
 		$.ajax({
 			dataType : "json",
-//			url : "progress?planId="+planId,
-			url : "progress",
-			// data: data,
+			url : "progress?planId="+planId,
+//			url : "progress",
 			success : function(data) {
-				console.log(data);
-//				refreshPuller(data.puller);
+//				console.log(data);
 				refreshPushers(data.pulls);
 			}
 		});
@@ -38,33 +33,11 @@ $(function() {
 		refreshPlan(retrievalPlanId);
 	}, 2000);
 
-	drawPuller = function(puller) {
-		progress = $.progress(puller.progress, "pullerProgressBar",
-				"progress-bar-success");
-		$("#pullerBox").empty();
-		$("#pullerBox").append(
-				'<div id="pullerBoxInner">puller '
-						+ puller.ip
-						+ ":"
-						+ puller.port
-						+ '<br />'
-						+ $.progressLeyend("puller-" + puller.clientId,
-								puller.progress) + progress + '</div>');
-
-	};
-
-	refreshPuller = function(puller) {
-		p = puller.progress;
-		$("span#puller-" + puller.clientId).html($.progressText(puller.progress));
-		$('#pullerProgressBar .progress-bar').attr('aria-valuenow', p);
-		$('#pullerProgressBar .progress-bar').attr('style',
-				'width: ' + p + '%;');
-		$('#pullerProgressBar .progress-bar span.sr-only').html(
-				p + '% Complete');
-	};
 
 	drawPushers = function(pushers) {
 		$("#pushersBox").empty();
+		$("#pushersBox").html('<table><thead><tr><td>pusher</td><td>from</td><td>to</td><td>current</td><td>bandWidth</td><td>progress</td></tr></thead><tbody></tbody></table>');
+		
 		$.each(pushers, function(id, pusher) {
 			drawPusher(pusher);
 		});
@@ -77,28 +50,26 @@ $(function() {
 	};
 
 	refreshPusher = function(pusher) {
-		p = pusher.progress;
-		console.log(pusher.progress);
-		console.log($('.progress#pusher-' + pusher.clientId + ' .progress-bar'));
-		$("span.pusher-" + pusher.clientId).html($.progressText(pusher.progress));
-		$('.progress#pusher-' + pusher.clientId + ' .progress-bar').attr('aria-valuenow', p);
-		$('.progress#pusher-' + pusher.clientId + ' .progress-bar').attr('style', 'width: ' + p + '%;');
-		$('.progress#pusher-' + pusher.clientId + ' .progress-bar span.sr-only').html(p + '% Complete');
+		// console.log($('#'+pusher.byteFrom+'-'+pusher.byteTo+' .current'));
+		
+		if(jQuery($('#'+pusher.byteFrom+'-'+pusher.byteTo+' .current')).length > 0){
 
+			$('#'+pusher.byteFrom+'-'+pusher.byteTo+' .current').html(pusher.byteCurrent);
+			$('#'+pusher.byteFrom+'-'+pusher.byteTo+' .bandwidth').html(parseFloat(pusher.bandWidth).toFixed(2));
+			$('#'+pusher.byteFrom+'-'+pusher.byteTo+' .progress').html(pusher.progress+"%");
+
+		} else {
+			
+			drawPusher(pusher);
+		
+		}
+		
+		
 	};
 
 	drawPusher = function(pusher) {
-		progress = $.progress(pusher.progress, "pusher-"+pusher.clientId);
-		return $("#pushersBox").append(
-				'<div id="pusher-'
-						+ pusher.clientId
-						+ '" class="pusherBox">'
-						+ pusher.ip
-						+ ":"
-						+ pusher.port
-						+ '<br />'
-						+ $.progressLeyend("pusher-" + pusher.clientId,
-								pusher.progress) + ' - ' + $.bandWidth(pusher) + progress +  '</div>');
+		$("#pushersBox tbody").append(
+				'<tr id="'+pusher.byteFrom+'-'+pusher.byteTo+'"><td>'+pusher.ip+':'+pusher.port+'</td><td>'+pusher.byteFrom+'</td><td>'+pusher.byteTo+'</td><td class="current">'+pusher.byteCurrent+'</td><td class="bandwidth">'+parseFloat(pusher.bandWidth).toFixed(2)+'</td><td class="progress">'+pusher.progress+'%'+'</td></tr>');
 	};
 
 	$.bandWidth = function(pusher) {
