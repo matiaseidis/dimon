@@ -1,8 +1,7 @@
 package org.test.streaming.status;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -77,25 +76,23 @@ public class StatusHandler {
 			return;
 		}
 
-		Map<CachoRequest, ProgressReport> completed = new HashMap<CachoRequest, ProgressReport>();
-//		for (Map.Entry<CachoRequest, ProgressReport> cachoProgress : activities
-//				.entrySet()) {
+		List<CachoProgress> completed = new ArrayList<CachoProgress>();
 		for (CachoProgress cachoProgress : activities) {
 
 			log.debug("about to log progress perc. "
 					+ cachoProgress.getProgressReport() == null ? "NULL" : cachoProgress.getProgressReport().getProgressPct());
-			if (cachoProgress.getProgressReport().getProgressPct() < 100) {
-				log(urlFor(activity(cachoProgress)));
-			} else {
-				completed.put(cachoProgress.getCachoRequest(), cachoProgress.getProgressReport());
+			log(urlFor(activity(cachoProgress)));
+			
+			if (cachoProgress.getProgressReport().getProgressPct() >= 100) {
+				completed.add(cachoProgress);
 			}
 		}
 		if (!completed.isEmpty()) {
 			log.debug("about to remove " + completed.size()
-					+ " cachos already completed");
-			for (CachoRequest cachoCompleted : completed.keySet()) {
-//				LastRetrievalPlanLocator.getInstance().getProgress()
-//						.remove(cachoCompleted);
+					+ " cacho progress already completed");
+			for (CachoProgress finished : completed) {
+				LastRetrievalPlanLocator.getInstance().getProgress()
+						.remove(finished);
 			}
 		}
 	}

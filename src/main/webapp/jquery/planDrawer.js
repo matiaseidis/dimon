@@ -36,7 +36,7 @@ $(function() {
 
 	drawPushers = function(pushers) {
 		$("#pushersBox").empty();
-		$("#pushersBox").html('<table><thead><tr><td>pusher</td><td>from</td><td>to</td><td>current</td><td>bandWidth</td><td>progress</td></tr></thead><tbody></tbody></table>');
+		$("#pushersBox").html('<table class="table"><thead><tr><td>pusher</td><td>from</td><td>to</td><td>current</td><td>bandWidth</td><td>progress</td></tr></thead><tbody></tbody></table>');
 		
 		$.each(pushers, function(id, pusher) {
 			drawPusher(pusher);
