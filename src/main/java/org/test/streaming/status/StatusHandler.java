@@ -5,8 +5,16 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.fluent.Content;
 import org.apache.http.client.fluent.Request;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.test.streaming.CachoRequest;
 import org.test.streaming.CachoServerHandler;
 import org.test.streaming.Conf;
@@ -22,11 +30,11 @@ public class StatusHandler {
 	private static Conf conf = null;
 	private CachoServerHandler cachoServerHandler;
 
-	private StatusHandler() {}
+	private StatusHandler() {
+	}
 
 	public StatusHandler init(Conf conf) {
 		setConf(conf);
-		// final CachoServerHandler handler = this.getCachoServerHandler();
 		if (conf.isStatusReportEnabled()) {
 			new Thread(new Runnable() {
 				@Override
@@ -34,20 +42,14 @@ public class StatusHandler {
 					while (true) {
 
 						try {
-						int currentActivities = LastRetrievalPlanLocator
-								.getInstance().getProgress().size();
-
-						log.debug("about to log total activities: "
-								+ currentActivities);
-						boolean iddle = currentActivities == 0;
-
-						if (iddle) {
-							logAlive();
-						} else {
-							logActivities(LastRetrievalPlanLocator
-									.getInstance().getProgress());
-						}
-						} catch(Exception e) {
+							int currentActivities = LastRetrievalPlanLocator.getInstance().getProgress().size();
+//							log.debug("about to log total activities: " + currentActivities);
+							if (currentActivities == 0) {
+								logAlive();
+							} else {
+								logActivities(LastRetrievalPlanLocator.getInstance().getProgress());
+							}
+						} catch (Exception e) {
 							e.printStackTrace();
 							log.error("ups...", e);
 						}
@@ -71,30 +73,74 @@ public class StatusHandler {
 	}
 
 	private void logActivities(List<CachoProgress> activities) {
-		
-		if(!StatusHandler.conf.isStatusReportEnabled()){
+
+		if (!StatusHandler.conf.isStatusReportEnabled()) {
 			return;
 		}
 
+		log(urlFor(activity()), progressBody(activities));
+
 		List<CachoProgress> completed = new ArrayList<CachoProgress>();
 		for (CachoProgress cachoProgress : activities) {
-
-			log.debug("about to log progress perc. "
-					+ cachoProgress.getProgressReport() == null ? "NULL" : cachoProgress.getProgressReport().getProgressPct());
-			log(urlFor(activity(cachoProgress)));
-			
 			if (cachoProgress.getProgressReport().getProgressPct() >= 100) {
 				completed.add(cachoProgress);
 			}
 		}
 		if (!completed.isEmpty()) {
-			log.debug("about to remove " + completed.size()
-					+ " cacho progress already completed");
+			log.debug("about to remove " + completed.size() + " cacho progress already completed");
 			for (CachoProgress finished : completed) {
-				LastRetrievalPlanLocator.getInstance().getProgress()
-						.remove(finished);
+				LastRetrievalPlanLocator.getInstance().getProgress().remove(finished);
 			}
 		}
+	}
+
+	private void log(String url, JSONObject progressBody) {
+		HttpClient client = new DefaultHttpClient();
+		HttpPost post = new HttpPost(url);
+		post.setEntity(new StringEntity(progressBody.toString(), ContentType.APPLICATION_JSON));
+		try {
+			client.execute(post);
+		} catch (Exception e) {
+			log.error(e);
+		}
+	}
+
+	private JSONObject progressBody(List<CachoProgress> activities) {
+
+		JSONObject body = new JSONObject();
+		JSONArray cachos = new JSONArray();
+		try {
+			for (CachoProgress p : activities) {
+				JSONObject cacho = new JSONObject();
+				CachoRequest request = p.getCachoRequest();
+				ProgressReport progress = p.getProgressReport();
+				String action = request.getDirection().name();
+				String planId = LastRetrievalPlanLocator.getInstance().getPlanId();
+				int byteCurrent = progress.getAmountOfReceivedBytes() + request.getCacho().getFirstByteIndex();
+				int byteFrom = request.getCacho().getFirstByteIndex();
+				int byteTo = request.getCacho().getLastByteIndex();
+				double bandWidth = progress.getBandWidth();
+				cacho.put("ip", conf.getDaemonHost());
+				cacho.put("port", conf.getDaemonPort());
+				cacho.put("action", action);
+				cacho.put("planId", planId);
+				cacho.put("clientId", conf.getUserId());
+				cacho.put("byteCurrent", byteCurrent);
+				cacho.put("byteFrom", byteFrom);
+				cacho.put("byteTo", byteTo);
+				cacho.put("bandWidth", bandWidth);
+				cachos.put(cacho);
+			}
+			body.put("cachos", cachos);
+		} catch (JSONException e) {
+			log.error("unable to report cacho progress", e);
+		}
+
+		return body;
+	}
+
+	private String activity() {
+		return conf.getStatusLoggerServiceReportActivitySuffix();
 	}
 
 	private Content log(String urlFor) {
@@ -107,8 +153,7 @@ public class StatusHandler {
 		try {
 			return request.execute().returnContent();
 		} catch (Throwable e) {
-			log.error("unable to perform request to " + request.toString()
-					+ " - " + e.getMessage());
+			log.error("unable to perform request to " + request.toString() + " - " + e.getMessage());
 		}
 		return null;
 	}
@@ -118,7 +163,7 @@ public class StatusHandler {
 	}
 
 	private void logAlive() {
-		if(!StatusHandler.conf.isStatusReportEnabled()){
+		if (!StatusHandler.conf.isStatusReportEnabled()) {
 			return;
 		}
 		log(urlFor(status(alive())));
@@ -151,42 +196,27 @@ public class StatusHandler {
 
 	private String status(String status) {
 		long bandWidth = 123;
-		//#statusReport/{event}/{ip}/{port}/{clientId}/{bandWidth}
-		//status.logger.service.suffix.statusReport=statusReport/%s/%s/%s/%s/%s
-		return String.format(
-				conf.getStatusLoggerServiceReportStateSuffix(), 
-				status, 
-				conf.getDaemonHost(),
-				conf.getDaemonPort(), 
-				conf.getUserId(), 
-				Long.toString(bandWidth));
+		// #statusReport/{event}/{ip}/{port}/{clientId}/{bandWidth}
+		// status.logger.service.suffix.statusReport=statusReport/%s/%s/%s/%s/%s
+		return String.format(conf.getStatusLoggerServiceReportStateSuffix(), status, conf.getDaemonHost(),
+				conf.getDaemonPort(), conf.getUserId(), Long.toString(bandWidth));
 	}
 
-	private String activity(CachoProgress cachoProgress) {
-
-		CachoRequest request = cachoProgress.getCachoRequest();
-		ProgressReport progress = cachoProgress.getProgressReport();
-		String action = request.getDirection().name();
-		String planId = LastRetrievalPlanLocator.getInstance().getPlanId();
-		int byteCurrent = progress.getAmountOfReceivedBytes()
-				+ request.getCacho().getFirstByteIndex();
-		int byteFrom = request.getCacho().getFirstByteIndex();
-		int byteTo = request.getCacho().getLastByteIndex();
-		double bandWidth = progress.getBandWidth();
-
-		return String.format(
-				conf.getStatusLoggerServiceReportActivitySuffix(), 
-				action, 
-				conf.getDaemonHost(),
-				conf.getDaemonPort(), 
-				planId, 
-				conf.getUserId(), 
-				byteCurrent,
-				byteFrom, 
-				byteTo, 
-				Double.toString(bandWidth) 
-				);
-	}
+//	private String activity(CachoProgress cachoProgress) {
+//
+//		CachoRequest request = cachoProgress.getCachoRequest();
+//		ProgressReport progress = cachoProgress.getProgressReport();
+//		String action = request.getDirection().name();
+//		String planId = LastRetrievalPlanLocator.getInstance().getPlanId();
+//		int byteCurrent = progress.getAmountOfReceivedBytes() + request.getCacho().getFirstByteIndex();
+//		int byteFrom = request.getCacho().getFirstByteIndex();
+//		int byteTo = request.getCacho().getLastByteIndex();
+//		double bandWidth = progress.getBandWidth();
+//
+//		return String.format(conf.getStatusLoggerServiceReportActivitySuffix(), action, conf.getDaemonHost(),
+//				conf.getDaemonPort(), planId, conf.getUserId(), byteCurrent, byteFrom, byteTo,
+//				Double.toString(bandWidth));
+//	}
 
 	public static StatusHandler getInstance() {
 		return instance;

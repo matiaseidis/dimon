@@ -33,8 +33,6 @@ protected static final Log log = LogFactory.getLog(Progress.class);
 			url += "/"+planId.toString();
 		}
 		
-		log.debug("about to get status from status repo: "+url);
-		
 		Response progressResponse = Request.Get(url).execute();
 		resp.setContentType("application/json");
 		String jsonProgress = new String(progressResponse.returnContent().asBytes());
