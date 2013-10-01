@@ -1,6 +1,7 @@
 package org.test.streaming.status;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -15,12 +16,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.test.streaming.CachoRequest;
 import org.test.streaming.CachoServerHandler;
 import org.test.streaming.Conf;
 import org.test.streaming.Dimon;
 import org.test.streaming.LastRetrievalPlanLocator;
-import org.test.streaming.ProgressReport;
 
 public class StatusHandler {
 
@@ -47,7 +46,7 @@ public class StatusHandler {
 							if (currentActivities == 0) {
 								logAlive();
 							} else {
-								logActivities(LastRetrievalPlanLocator.getInstance().getProgress());
+								logActivities(LastRetrievalPlanLocator.getInstance().getProgress().values());
 							}
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -72,24 +71,25 @@ public class StatusHandler {
 		StatusHandler.conf = conf;
 	}
 
-	private void logActivities(List<CachoProgress> activities) {
+	private void logActivities(Collection<CachoProgress> collection) {
 
 		if (!StatusHandler.conf.isStatusReportEnabled()) {
 			return;
 		}
 
-		log(urlFor(activity()), progressBody(activities));
+		log(urlFor(activity()), progressBody(collection));
 
 		List<CachoProgress> completed = new ArrayList<CachoProgress>();
-		for (CachoProgress cachoProgress : activities) {
-			if (cachoProgress.getProgressReport().getProgressPct() >= 100) {
+		for (CachoProgress cachoProgress : collection) {
+			if (cachoProgress.getProgressPct() >= 100) {
 				completed.add(cachoProgress);
 			}
+			
 		}
 		if (!completed.isEmpty()) {
 			log.debug("about to remove " + completed.size() + " cacho progress already completed");
 			for (CachoProgress finished : completed) {
-				LastRetrievalPlanLocator.getInstance().getProgress().remove(finished);
+				LastRetrievalPlanLocator.getInstance().getProgress().remove(LastRetrievalPlanLocator.progressKey(finished));
 			}
 		}
 	}
@@ -105,23 +105,23 @@ public class StatusHandler {
 		}
 	}
 
-	private JSONObject progressBody(List<CachoProgress> activities) {
+	private JSONObject progressBody(Collection<CachoProgress> collection) {
 
 		JSONObject body = new JSONObject();
 		JSONArray cachos = new JSONArray();
 		try {
-			for (CachoProgress p : activities) {
+			for (CachoProgress p : collection) {
 				JSONObject cacho = new JSONObject();
-				CachoRequest request = p.getCachoRequest();
-				ProgressReport progress = p.getProgressReport();
-				String action = request.getDirection().name();
+//				CachoRequest request = p.getCachoRequest();
+//				ProgressReport progress = p.getProgressReport();
+				String action = "PULL";
 				String planId = LastRetrievalPlanLocator.getInstance().getPlanId();
-				int byteCurrent = progress.getAmountOfReceivedBytes() + request.getCacho().getFirstByteIndex();
-				int byteFrom = request.getCacho().getFirstByteIndex();
-				int byteTo = request.getCacho().getLastByteIndex();
-				double bandWidth = progress.getBandWidth();
-				cacho.put("ip", conf.getDaemonHost());
-				cacho.put("port", conf.getDaemonPort());
+				int byteCurrent = p.getFirstByteIndex() + p.getAmountOfReceivedBytes();
+				int byteFrom = p.getFirstByteIndex();
+				int byteTo = p.getFirstByteIndex() + p.getLength();
+				double bandWidth = p.getBandWidth();
+				cacho.put("ip", p.getHost());
+				cacho.put("port", p.getPort());
 				cacho.put("action", action);
 				cacho.put("planId", planId);
 				cacho.put("clientId", conf.getUserId());
