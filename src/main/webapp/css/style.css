@@ -13,7 +13,7 @@
 #outerBox {
 //	background-color:red;
 font-size:10px;
-width:300px;
+width:380px;
 }
 #pullerBox {
 	float:left;
@@ -22,7 +22,7 @@ width:300px;
 #pushersBox {
 //	padding-left: 300px;
 //	margin-left:15px;
-width:300px;
+width:380px;
 }
 .bold {
 	font-weight:bold;
@@ -36,7 +36,7 @@ width:300px;
 }
 .pusherBox{
 //	background-color:yellow;
-width:130px;
-float:left;
-height:40px;
+/* width:130px; */
+/* float:left; */
+/* height:40px; */
 }

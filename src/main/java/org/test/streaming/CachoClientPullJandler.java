@@ -1,6 +1,7 @@
 package org.test.streaming;
 
 import java.io.OutputStream;
+import java.net.InetSocketAddress;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -41,6 +42,19 @@ public class CachoClientPullJandler extends CachoClientHandler {
 		double bw = this.getAmountOfReceivedBytes() / ((double) deltaT / 1000d);
 		this.getProgressReport().setBandWidth(bw);
 		this.getProgressObserver().progressed(this.getProgressReport());
+		
+		String ip = "localhost";
+		LastRetrievalPlanLocator.getInstance()
+		.getProgressFor(this.getCachoRequest().getFirstByteIndex(), this.getCachoRequest().getLength())
+		.update(
+				this.getAmountOfReceivedBytes(),
+				this.getProgressReport().getBandWidth(),
+				this.getProgressReport().getProgressPct(),
+				this.getProgressReport().getMsToComplete(),
+//				((InetSocketAddress)ctx.getChannel().getRemoteAddress()).getAddress().getCanonicalHostName(),
+				ip,
+				((InetSocketAddress)ctx.getChannel().getRemoteAddress()).getPort()
+				);
 	}
 
 	public OutputStream getOut() {

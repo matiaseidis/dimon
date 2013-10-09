@@ -1,0 +1,20 @@
+	return $("#pushersBox").append(
+				'<div id="pusher-'
+						+ pusher.clientId
+						+ '" class="pusherBox">'
+						+ pusher.ip
+						+ ":"
+						+ pusher.port
+						+ ' || '
+						+ "from: "+pusher.byteFrom
+						+ ' || '
+						+ "to: "+pusher.byteTo
+						+ ' || '
+						+ "bw: "+parseFloat(pusher.bandWidth).toFixed(2)
+						+ ' || '
+						+ pusher.byteCurrent+" - "+pusher.progress +" %"
+//						+ $.progress(pusher.progress, "pusher-"+pusher.clientId)
+//						+ $.progressLeyend("pusher-" + pusher.clientId,
+//								pusher.progress) + ' - ' + $.bandWidth(pusher) + progress +  
+						+ '</div>');
+"<table><thead><tr><td>pusher</td></tr><tr><td>from</td></tr><tr><td>to</td></tr><tr><td>current</td></tr><tr><td>bandWidth</td></tr><tr><td>progress</td></tr></thead><tbody><tr><td>"+pusher.ip+":"+pusher.port+"</td><td>"+pusher.byteFrom+"</td><td>"+pusher.byteTo+"</td><td>"+pusher.byteCurrent+"</td><td>"+parseFloat(pusher.bandWidth).toFixed(2)+"</td><td>"+pusher.progress+"%"+"</td></tr></tbody></table>";

@@ -30,7 +30,13 @@ public class CompositeMovieRetrievalPlan {
 				currentPlan.getRequests().add(requests.get(d * maxParalReqs + i));
 			}
 		}
-
+		
+		for(MovieRetrievalPlan p : this.getPlans()) {
+			for(CachoRetrieval cr : p.getRequests()) {
+//				LastRetrievalPlanLocator.getInstance().registerCacho(cr.getRequest());
+				LastRetrievalPlanLocator.getInstance().getProgressFor(cr.getRequest().getFirstByteIndex(), cr.getRequest().getLength());
+			}
+		}
 	}
 
 	public String getVideoId() {

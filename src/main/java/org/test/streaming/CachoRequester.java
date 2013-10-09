@@ -17,7 +17,7 @@ import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.serialization.ObjectEncoder;
-import org.test.streaming.status.StatusHandler;
+import org.test.streaming.status.CachoProgress;
 
 public class CachoRequester implements ProgressObserver {
 	
@@ -31,8 +31,6 @@ public class CachoRequester implements ProgressObserver {
 	private StreamingProgressObserver progressObserver;
 
 	public CachoRequester() {
-		log.debug("about to register progress:" + progress.size());
-//		LastRetrievalPlanLocator.getInstance().addProgress(progress);
 	}
 
 	public void requestCacho(String host, int port, String movieFileName, int zeroBasedFirstBytePosition, int amountOfBytes, final OutputStream out) {
@@ -49,7 +47,7 @@ public class CachoRequester implements ProgressObserver {
 		ProgressReport value = cachoClientPullJandler.getProgressReport();
 		
 		this.getProgress().put(key, value);
-		LastRetrievalPlanLocator.getInstance().getProgress().put(key, value);
+//		LastRetrievalPlanLocator.getInstance().updateCachoProgress(key, value);
 		
 		final ChannelPipeline pipeline = Channels.pipeline(new ObjectEncoder(), cachoClientPullJandler);
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
@@ -86,7 +84,7 @@ public class CachoRequester implements ProgressObserver {
 		CachoRequest key = (CachoRequest) progressReport.getTarget();
 		ProgressReport value = progressReport;
 		this.getProgress().put(key, value);
-		LastRetrievalPlanLocator.getInstance().getProgress().put(key, value);
+//		LastRetrievalPlanLocator.getInstance().updateCachoProgress(key, value);
 		if (this.getProgressObserver() != null) {
 			this.getProgressObserver().progressed(this.getProgress());
 		}
