@@ -1,6 +1,5 @@
 package org.test.streaming;
 
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
@@ -11,7 +10,9 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
+import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.channel.socket.oio.OioServerSocketChannelFactory;
+import org.jboss.netty.handler.codec.serialization.ClassResolvers;
 import org.jboss.netty.handler.codec.serialization.ObjectDecoder;
 import org.test.streaming.status.StatusHandler;
 
@@ -43,7 +44,8 @@ public class Dimon extends SimpleChannelUpstreamHandler {
 		StatusHandler.getInstance().setCachoServerHandler(cachoServerHandler);
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			public ChannelPipeline getPipeline() throws Exception {
-				return Channels.pipeline(new ObjectDecoder(), cachoServerHandler);
+
+				return Channels.pipeline(new ObjectDecoder(ClassResolvers.cacheDisabled(null)), new CachoServerHandler(conf));
 			}
 		});
 		bootstrap.setOption("child.tcpNoDelay", true);

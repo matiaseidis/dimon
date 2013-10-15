@@ -35,12 +35,15 @@ public class DefaultMovieRetrievalPlanInterpreter implements MovieRetrievalPlanI
 			public void onCachoComplete(CachoStreamer streamer) {
 				if (streamers.size() > 0) {
 					streamers.get(0).stream();
+				} else {
+					log.debug("No more streamers, streaming finished.");
+					streamFinishedLatch.countDown();
 				}
 			}
 		});
-		
+
 		LastRetrievalPlanLocator.getInstance().addCachoStreamer(firstStreamer);
-		
+
 		Runnable runnable = new Runnable() {
 
 			@Override

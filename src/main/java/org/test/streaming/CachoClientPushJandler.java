@@ -6,6 +6,7 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
+import org.jboss.netty.channel.MessageEvent;
 
 public class CachoClientPushJandler extends CachoClientHandler {
 
@@ -20,13 +21,17 @@ public class CachoClientPushJandler extends CachoClientHandler {
 	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
 		super.channelConnected(ctx, e);
 		ctx.getPipeline().removeFirst();
+	}
+
+	@Override
+	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+		super.messageReceived(ctx, e);
 		long skip = this.getInput().skip(this.getCachoRequest().getFirstByteIndex());
 		if (skip != this.getCachoRequest().getFirstByteIndex()) {
 			log.fatal("Failed to skip requested offset in " + this.getCachoRequest() + " cacho upload canceled.");
 			e.getChannel().write(ChannelBuffers.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
 		} else {
 			new CachoWriter().uploadCacho(e.getChannel(), this.getInput(), this.getCachoRequest().getLength());
-			e.getChannel().write(ChannelBuffers.EMPTY_BUFFER).addListener(ChannelFutureListener.CLOSE);
 		}
 	}
 

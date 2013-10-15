@@ -29,7 +29,7 @@ public class CachoWriter implements ChannelFutureListener {
 
 	public void uploadCacho(Channel output, InputStream input, int lenght) throws IOException {
 		this.total = lenght;
-		int b = this.desiredBytesps > 0 ? this.desiredBytesps : 1024 * 256;
+		int b = this.desiredBytesps > 0 ? this.desiredBytesps : 1024 * 64;
 		try {
 			log.debug("Uploading cacho...");
 			int s = lenght / b;
@@ -63,14 +63,13 @@ public class CachoWriter implements ChannelFutureListener {
 	}
 
 	private int write(Channel output, InputStream input, int b) throws IOException, InterruptedException {
-		ChannelBuffer outBuffer = ChannelBuffers.buffer(b);
-		outBuffer.writeBytes(input, outBuffer.writableBytes());
-		int readableBytes = outBuffer.readableBytes();
-		output.write(outBuffer).sync().sync();
-		written += readableBytes;
+		ChannelBuffer outBuffer = ChannelBuffers.directBuffer(b);
+		int writtenBytes = outBuffer.writeBytes(input, outBuffer.writableBytes());
+		output.write(outBuffer);
+		written += writtenBytes;
 		double progress = ((double) written / (double) total) * 100d;
 		System.out.println("Written " + written + " " + (total - written) + " to go ( " + progress + "%)");
-		return readableBytes;
+		return writtenBytes;
 	}
 
 	@Override

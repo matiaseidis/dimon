@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.commons.io.FileExistsException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
@@ -118,7 +119,7 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 	private void cachoDownloaded() {
 		File dest = sharedCachoFile();
 		try {
-			FileUtils.copyFile(this.getCachoFile(), dest);
+			FileUtils.moveFileToDirectory(this.getCachoFile(), this.getSharingDir(), false);
 		} catch (IOException e) {
 			log.warn("Failed to move cacho file " + this.getCachoFile() + " to share dir: " + dest);
 			dest = this.getCachoFile();

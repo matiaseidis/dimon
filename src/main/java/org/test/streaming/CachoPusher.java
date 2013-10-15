@@ -45,7 +45,7 @@ public class CachoPusher {
 		// Start the connection attempt.
 		ChannelFuture future = bootstrap.connect(new InetSocketAddress(this.getRemoteDaemonHost(), this.getPort()));
 		bootstrap.setOption("tcpNoDelay", true);
-		bootstrap.setOption("keepAlive", true);
+		// bootstrap.setOption("keepAlive", true);
 		// Wait until the connection is closed or the connection attempt fails.
 		future.getChannel().getCloseFuture().awaitUninterruptibly();
 		// Shut down thread pools to exit.
