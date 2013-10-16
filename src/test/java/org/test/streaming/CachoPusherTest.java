@@ -27,7 +27,7 @@ public class CachoPusherTest {
 	public void testPush() throws Exception {
 
 		Conf conf = new Conf("/alt-test-conf.properties");
-		new DefaultMovieSharingPlanInterpreter(conf).interpret(new HardcodedPlan("videoId", conf));
+		new DefaultMovieSharingPlanInterpreter(conf).interpret(new DummyMovieRetrievalPlan("videoId", conf));
 		Thread.sleep(20000);
 		BufferedOutputStream baos = new BufferedOutputStream(new FileOutputStream(new File("sandonga1.mp4")));
 		new DefaultMovieRetrievalPlanInterpreter(conf.getCachosDir(), conf.getTempDir()).interpret(new DummyMovieRetrievalPlan(conf.get("test.video.file.name"), conf), baos, new ProgressLogger());
