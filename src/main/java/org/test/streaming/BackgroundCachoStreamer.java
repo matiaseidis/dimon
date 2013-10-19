@@ -88,7 +88,8 @@ public class BackgroundCachoStreamer extends CachoStreamer {
 	}
 
 	private void logCacho() {
-		log.debug("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Downloaded, streamed and saved to " + this.getCachoFile());
+		long totalSpace = this.getCachoFile().getTotalSpace();
+		log.debug("[" + this.getFirstByte() + "," + (this.getFirstByte() + this.getCachoLength() - 1) + "] - Downloaded, streamed and saved " + totalSpace + " bytes to " + this.getCachoFile());
 	}
 
 	private void completCachoFile(ChannelBuffer buffer) {

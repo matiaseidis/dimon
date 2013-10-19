@@ -2,11 +2,14 @@ package org.test.streaming;
 
 import java.io.InputStream;
 
+import org.apache.commons.io.Charsets;
+import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelFutureListener;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.MessageEvent;
+import org.jboss.netty.util.CharsetUtil;
 
 public class CachoClientPushJandler extends CachoClientHandler {
 
@@ -26,6 +29,12 @@ public class CachoClientPushJandler extends CachoClientHandler {
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
 		super.messageReceived(ctx, e);
+		ChannelBuffer message = (ChannelBuffer) e.getMessage();
+		String messageString = message.toString(CharsetUtil.UTF_8);
+		if ("yalotengo".equals(messageString)) {
+			log.debug("Cacho push rejected, already hosted.");
+			return;
+		}
 		long skip = this.getInput().skip(this.getCachoRequest().getFirstByteIndex());
 		if (skip != this.getCachoRequest().getFirstByteIndex()) {
 			log.fatal("Failed to skip requested offset in " + this.getCachoRequest() + " cacho upload canceled.");

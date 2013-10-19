@@ -75,7 +75,17 @@ public class CachoServerHandler extends SimpleChannelHandler {
 				this.sendCacho(ctx, e);
 				this.getChannelStatus().remove(e.getChannel());
 			} else if (cachoDirection == CachoDirection.PUSH) {
+
 				log.debug("Cacho PUSH requested  " + request);
+				List<MovieCachoFile> files = this.getMovieFileLocator().locate(request);
+				if (files != null) {
+					log.debug("Cacho alrady hosted, no need to push.");
+					e.getChannel().write(ChannelBuffers.copiedBuffer("yalotengo", CharsetUtil.UTF_8)).addListener(ChannelFutureListener.CLOSE);
+					e.getChannel().close();
+					this.getChannelStatus().remove(e.getChannel());
+					return;
+				}
+
 				// just wait for next messsage with cachos' bytes
 				ctx.getPipeline().removeFirst();
 				this.setCurrentRequest(request);
@@ -100,7 +110,7 @@ public class CachoServerHandler extends SimpleChannelHandler {
 			e.getChannel().close();
 			this.getChannelStatus().remove(e.getChannel());
 			this.getPushedCachoStream().close();
-			log.info("Cacho received successfully: " + 	this.getCurrentRequest());
+			log.info("Cacho received successfully: " + this.getCurrentRequest());
 			File receivedCacho = this.getReceivingCachoMetadata().getCacho().getMovieFile();
 			FileUtils.moveFileToDirectory(receivedCacho, this.getConf().getCachosDir(), false);
 			this.getIndex().newCachoAvailableLocally(this.getReceivingCachoMetadata().getCacho());
