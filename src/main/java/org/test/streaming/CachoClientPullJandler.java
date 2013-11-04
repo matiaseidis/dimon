@@ -38,23 +38,16 @@ public class CachoClientPullJandler extends CachoClientHandler {
 		this.setMsDownloading(deltaT);
 		long remainingTime = remainingBytes * deltaT / this.getAmountOfReceivedBytes();
 		this.setMsToComplete(remainingTime);
-		this.setProgressPct((int) (((double) this.getAmountOfReceivedBytes() / length) * 100));
+		this.setProgressPct((int) (((double) this.getAmountOfReceivedBytes() / length) * 100d));
 		double bw = this.getAmountOfReceivedBytes() / ((double) deltaT / 1000d);
 		this.getProgressReport().setBandWidth(bw);
 		this.getProgressObserver().progressed(this.getProgressReport());
-		
+
 		String ip = "localhost";
-		LastRetrievalPlanLocator.getInstance()
-		.getProgressFor(this.getCachoRequest().getFirstByteIndex(), this.getCachoRequest().getLength())
-		.update(
-				this.getAmountOfReceivedBytes(),
-				this.getProgressReport().getBandWidth(),
-				this.getProgressReport().getProgressPct(),
-				this.getProgressReport().getMsToComplete(),
-//				((InetSocketAddress)ctx.getChannel().getRemoteAddress()).getAddress().getCanonicalHostName(),
-				ip,
-				((InetSocketAddress)ctx.getChannel().getRemoteAddress()).getPort()
-				);
+		LastRetrievalPlanLocator.getInstance().getProgressFor(this.getCachoRequest().getFirstByteIndex(), this.getCachoRequest().getLength())
+				.update(this.getAmountOfReceivedBytes(), this.getProgressReport().getBandWidth(), this.getProgressReport().getProgressPct(), this.getProgressReport().getMsToComplete(),
+				// ((InetSocketAddress)ctx.getChannel().getRemoteAddress()).getAddress().getCanonicalHostName(),
+						ip, ((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getPort());
 	}
 
 	public OutputStream getOut() {

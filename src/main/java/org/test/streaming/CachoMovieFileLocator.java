@@ -45,7 +45,7 @@ public class CachoMovieFileLocator extends LibraryBasedMovieFileLocator {
 		MovieCacho curentRequest = new MovieCacho(request.getCacho().getFirstByteIndex(), request.getCacho().getLength());
 		int c = 0;
 		while (c < request.getLength() && !overlaps.isEmpty()) {
-			for (Iterator iterator = overlaps.iterator(); iterator.hasNext();) {
+			for (Iterator iterator = overlaps.iterator(); iterator.hasNext() && c < request.getLength();) {
 				MoviePartMetadata moviePartMetadata = (MoviePartMetadata) iterator.next();
 				MovieCacho candidate = moviePartMetadata.getCacho().getCacho();
 				MovieCacho overlap = curentRequest.overlaps(candidate);

@@ -2,7 +2,6 @@ package org.test.streaming;
 
 import java.io.InputStream;
 
-import org.apache.commons.io.Charsets;
 import org.jboss.netty.buffer.ChannelBuffer;
 import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.ChannelFutureListener;

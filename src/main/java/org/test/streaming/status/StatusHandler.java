@@ -42,7 +42,8 @@ public class StatusHandler {
 
 						try {
 							int currentActivities = LastRetrievalPlanLocator.getInstance().getProgress().size();
-//							log.debug("about to log total activities: " + currentActivities);
+							// log.debug("about to log total activities: " +
+							// currentActivities);
 							if (currentActivities == 0) {
 								logAlive();
 							} else {
@@ -60,7 +61,7 @@ public class StatusHandler {
 						}
 					}
 				}
-			}).start();
+			}, "logger").start();
 		} else {
 			log.info("status report is disabled");
 		}
@@ -81,10 +82,10 @@ public class StatusHandler {
 
 		List<CachoProgress> completed = new ArrayList<CachoProgress>();
 		for (CachoProgress cachoProgress : collection) {
-			if (cachoProgress.getProgressPct() >= 100) {
+			if (cachoProgress.isRepotedAsComplete()) {
 				completed.add(cachoProgress);
 			}
-			
+
 		}
 		if (!completed.isEmpty()) {
 			log.debug("about to remove " + completed.size() + " cacho progress already completed");
@@ -112,8 +113,8 @@ public class StatusHandler {
 		try {
 			for (CachoProgress p : collection) {
 				JSONObject cacho = new JSONObject();
-//				CachoRequest request = p.getCachoRequest();
-//				ProgressReport progress = p.getProgressReport();
+				// CachoRequest request = p.getCachoRequest();
+				// ProgressReport progress = p.getProgressReport();
 				String action = "PULL";
 				String planId = LastRetrievalPlanLocator.getInstance().getPlanId();
 				int byteCurrent = p.getFirstByteIndex() + p.getAmountOfReceivedBytes();
@@ -130,6 +131,9 @@ public class StatusHandler {
 				cacho.put("byteTo", byteTo);
 				cacho.put("bandWidth", bandWidth);
 				cachos.put(cacho);
+				if (byteCurrent == byteTo) {
+					p.reportedAsComplete();
+				}
 			}
 			body.put("cachos", cachos);
 		} catch (JSONException e) {
@@ -198,25 +202,27 @@ public class StatusHandler {
 		long bandWidth = 123;
 		// #statusReport/{event}/{ip}/{port}/{clientId}/{bandWidth}
 		// status.logger.service.suffix.statusReport=statusReport/%s/%s/%s/%s/%s
-		return String.format(conf.getStatusLoggerServiceReportStateSuffix(), status, conf.getDaemonHost(),
-				conf.getDaemonPort(), conf.getUserId(), Long.toString(bandWidth));
+		return String.format(conf.getStatusLoggerServiceReportStateSuffix(), status, conf.getDaemonHost(), conf.getDaemonPort(), conf.getUserId(), Long.toString(bandWidth));
 	}
 
-//	private String activity(CachoProgress cachoProgress) {
-//
-//		CachoRequest request = cachoProgress.getCachoRequest();
-//		ProgressReport progress = cachoProgress.getProgressReport();
-//		String action = request.getDirection().name();
-//		String planId = LastRetrievalPlanLocator.getInstance().getPlanId();
-//		int byteCurrent = progress.getAmountOfReceivedBytes() + request.getCacho().getFirstByteIndex();
-//		int byteFrom = request.getCacho().getFirstByteIndex();
-//		int byteTo = request.getCacho().getLastByteIndex();
-//		double bandWidth = progress.getBandWidth();
-//
-//		return String.format(conf.getStatusLoggerServiceReportActivitySuffix(), action, conf.getDaemonHost(),
-//				conf.getDaemonPort(), planId, conf.getUserId(), byteCurrent, byteFrom, byteTo,
-//				Double.toString(bandWidth));
-//	}
+	// private String activity(CachoProgress cachoProgress) {
+	//
+	// CachoRequest request = cachoProgress.getCachoRequest();
+	// ProgressReport progress = cachoProgress.getProgressReport();
+	// String action = request.getDirection().name();
+	// String planId = LastRetrievalPlanLocator.getInstance().getPlanId();
+	// int byteCurrent = progress.getAmountOfReceivedBytes() +
+	// request.getCacho().getFirstByteIndex();
+	// int byteFrom = request.getCacho().getFirstByteIndex();
+	// int byteTo = request.getCacho().getLastByteIndex();
+	// double bandWidth = progress.getBandWidth();
+	//
+	// return String.format(conf.getStatusLoggerServiceReportActivitySuffix(),
+	// action, conf.getDaemonHost(),
+	// conf.getDaemonPort(), planId, conf.getUserId(), byteCurrent, byteFrom,
+	// byteTo,
+	// Double.toString(bandWidth));
+	// }
 
 	public static StatusHandler getInstance() {
 		return instance;

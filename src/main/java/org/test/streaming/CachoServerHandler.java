@@ -75,7 +75,6 @@ public class CachoServerHandler extends SimpleChannelHandler {
 				this.sendCacho(ctx, e);
 				this.getChannelStatus().remove(e.getChannel());
 			} else if (cachoDirection == CachoDirection.PUSH) {
-
 				log.debug("Cacho PUSH requested  " + request);
 				List<MovieCachoFile> files = this.getMovieFileLocator().locate(request);
 				if (files != null) {
