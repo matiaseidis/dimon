@@ -1,5 +1,7 @@
 package org.test.streaming.status;
 
+import java.net.InetSocketAddress;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public class CachoProgress {
@@ -49,6 +51,12 @@ public class CachoProgress {
 	// public void setProgressReport(ProgressReport progressReport) {
 	// this.progressReport = progressReport;
 	// }
+
+	public CachoProgress(int firstByteIndex, int length, String ip, int port) {
+		this(firstByteIndex, length);
+		this.setPort(port);
+		this.setHost(ip);
+	}
 
 	public int getFirstByteIndex() {
 		return firstByteIndex;

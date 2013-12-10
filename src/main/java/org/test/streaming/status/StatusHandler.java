@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.client.HttpClient;
@@ -121,7 +122,8 @@ public class StatusHandler {
 				int byteFrom = p.getFirstByteIndex();
 				int byteTo = p.getFirstByteIndex() + p.getLength();
 				double bandWidth = p.getBandWidth();
-				cacho.put("ip", p.getHost());
+				String host = StringUtils.isBlank(p.getHost()) ? conf.getDaemonHost() : p.getHost(); 
+				cacho.put("ip", host);
 				cacho.put("port", p.getPort());
 				cacho.put("action", action);
 				cacho.put("planId", planId);

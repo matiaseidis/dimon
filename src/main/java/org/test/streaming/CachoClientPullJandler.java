@@ -43,7 +43,9 @@ public class CachoClientPullJandler extends CachoClientHandler {
 		this.getProgressReport().setBandWidth(bw);
 		this.getProgressObserver().progressed(this.getProgressReport());
 
-		String ip = "localhost";
+//		String ip = "localhost";
+		String ip = ((InetSocketAddress)ctx.getChannel().getRemoteAddress()).getAddress().getCanonicalHostName();
+		int port = ((InetSocketAddress) ctx.getChannel().getRemoteAddress()).getPort();
 		LastRetrievalPlanLocator.getInstance().getProgressFor(this.getCachoRequest().getFirstByteIndex(), this.getCachoRequest().getLength())
 				.update(this.getAmountOfReceivedBytes(), this.getProgressReport().getBandWidth(), this.getProgressReport().getProgressPct(), this.getProgressReport().getMsToComplete(),
 				// ((InetSocketAddress)ctx.getChannel().getRemoteAddress()).getAddress().getCanonicalHostName(),
